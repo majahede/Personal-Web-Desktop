@@ -10,6 +10,34 @@
  */
 const template = document.createElement('template')
 template.innerHTML = `
+<style> 
+:host {
+  display: block;
+  height: 500px;
+  width: 400px;
+  background-color: green;
+  padding: 10px;
+  float: left;
+}
+
+.chat-output {
+  display: block;
+  height: 300px;
+  width: 100%;
+  background-color: white;
+}
+
+</style>
+<div class="chat-output"> 
+</div>
+<form class ="message-form">
+<input id="message" placeholder="Write your message"/>
+<input type="button" class="send-message" value="Send"/>
+</form>
+<form class="nickname-form">
+<input id="nickname" placeholder="Your Nickname"/>
+<input type="button" class="set-nickname" value="Save"/>
+</form>
 
 `
 /**
@@ -29,6 +57,29 @@ customElements.define('messages-app',
       // append the template to the shadow root.
       this.attachShadow({ mode: 'open' })
       this.shadowRoot.appendChild(template.content.cloneNode(true))
+      this.message = this.shadowRoot.querySelector('#message')
+      this.send = this.shadowRoot.querySelector('.send-message')
+      this.nickname = this.shadowRoot.querySelector('#nickname')
+    }
+
+    connectedCallback () {
+      const websocket = new WebSocket('wss://cscloud6-127.lnu.se/socket/')
+      websocket.onopen = function (event) {
+        console.log('WebSocket connected.')
+        console.log(websocket.readyState)
+      }
+      this.send.addEventListener('click', () => console.log(this.message.value))
     }
   }
 )
+
+/*
+{
+  "type": "message",
+  "data" : this.message.value,
+  "username": "Maja",
+  "key": "eDBE76deU7L0H9mEBgxUKVR0VCnq0XBd"
+}
+The properties type, data, username and key are mandatory when sending a message to the server. The properties type, data and username will always be present when you receive a message from the server. Additionally, all properties sent from one user will be echoed to all receiving clients.
+message api key = eDBE76deU7L0H9mEBgxUKVR0VCnq0XBd
+*/
