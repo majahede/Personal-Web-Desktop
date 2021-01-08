@@ -1,5 +1,5 @@
 /**
- * The Personal Web Desktop web component module.
+ * The Messages sub-app module.
  *
  * @author Maja Hedegärd <mh223pi@student.lnu.se>
  * @version 1.0.0
@@ -10,36 +10,12 @@
  */
 const template = document.createElement('template')
 template.innerHTML = `
-<style> 
-:host {
-    display: block;
-    height: 800px;
-    width: 100%;
-    background-color: blue;
-  }
-
-.main {
-  height: 100%;
-  width: 100%;
-  background-color: #f5d5d5;
-}
-
-.footer {
-  height: 70px;
-  width: 100%;
-  background-color: #4b4646;
-}
-
-</style>
-<div class = "main"></div>
-<div class="footer"></div>
-
 
 `
 /**
  * Define custom element.
  */
-customElements.define('personal-web-desktop',
+customElements.define('messages-app',
   /**
    * @class
    */
