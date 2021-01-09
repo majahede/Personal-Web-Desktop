@@ -60,15 +60,41 @@ customElements.define('messages-app',
       this.message = this.shadowRoot.querySelector('#message')
       this.send = this.shadowRoot.querySelector('.send-message')
       this.nickname = this.shadowRoot.querySelector('#nickname')
+      const chat = this.shadowRoot.querySelector('.chat-output')
+      this.websocket = new WebSocket('wss://cscloud6-127.lnu.se/socket/')
     }
 
     connectedCallback () {
-      const websocket = new WebSocket('wss://cscloud6-127.lnu.se/socket/')
-      websocket.onopen = function (event) {
-        console.log('WebSocket connected.')
-        console.log(websocket.readyState)
+      this.websocket.onmessage = function (event) {
+        const message = JSON.parse(event.data)
+        const messageOutput = `${message.username}: ${message.data}`
+        console.log(messageOutput)
       }
-      this.send.addEventListener('click', () => console.log(this.message.value))
+
+      this.websocket.addEventListener('message', function (event) {
+        const message = JSON.parse(event.data)
+        const messageOutput = `${message.username}: ${message.data}`
+        console.log(messageOutput)
+      })
+      this.send.addEventListener('click', () => {
+        const data = {
+          type: 'message',
+          data: this.message.value,
+          username: 'Maja',
+          key: 'eDBE76deU7L0H9mEBgxUKVR0VCnq0XBd'
+        }
+        console.log(data)
+      })
+    }
+
+    sendMessage () {
+      const data = {
+        type: 'message',
+        data: 'hej',
+        username: 'Maja',
+        key: 'eDBE76deU7L0H9mEBgxUKVR0VCnq0XBd'
+      }
+      this.websocket.send(JSON.stringify(data))
     }
   }
 )
