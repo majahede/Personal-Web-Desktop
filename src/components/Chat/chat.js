@@ -27,16 +27,21 @@ template.innerHTML = `
   background-color: white;
 }
 
+#message {
+  width: 95%;
+  height: 100px;
+}
+
 </style>
 <div class="chat-output"> 
 </div>
 <form class ="message-form">
-<input id="message" placeholder="Write your message"/>
+<textarea id="message" placeholder="Write your message"> </textarea>
 <input type="button" class="send-message" value="Send"/>
 </form>
-<form class="nickname-form">
-<input id="nickname" placeholder="Your Nickname"/>
-<input type="button" class="set-nickname" value="Save"/>
+<form class="username-form">
+<input id="username" placeholder="Your username"/>
+<input type="button" class="set-username" value="Save"/>
 </form>
 
 `
@@ -59,7 +64,8 @@ customElements.define('messages-app',
       this.shadowRoot.appendChild(template.content.cloneNode(true))
       this.message = this.shadowRoot.querySelector('#message')
       this.send = this.shadowRoot.querySelector('.send-message')
-      this.nickname = this.shadowRoot.querySelector('#nickname')
+      this.username = this.shadowRoot.querySelector('#username')
+      this.usernameButton = this.shadowRoot.querySelector('.set-username')
       this.chat = this.shadowRoot.querySelector('.chat-output')
       this.websocket = new WebSocket('wss://cscloud6-127.lnu.se/socket/')
     }
@@ -68,11 +74,16 @@ customElements.define('messages-app',
      * Called after the element is inserted into the DOM.
      */
     connectedCallback () {
-    /**
-     * Gets message from server.
-     *
-     * @param {object} event - MessageEvent from server
-     */
+      this.usernameButton.addEventListener('click', () => {
+        window.localStorage.setItem('username', JSON.stringify(this.username.value))
+        this.username.value = ''
+      })
+
+      /**
+       * Gets message from server.
+       *
+       * @param {object} event - MessageEvent from server
+       */
       this.websocket.onmessage = (event) => {
         const data = JSON.parse(event.data)
         this.showMessage(`${data.username}: ${data.data}`)
@@ -80,6 +91,7 @@ customElements.define('messages-app',
 
       this.send.addEventListener('click', () => {
         this.sendMessage()
+        this.message.value = ''
       })
     }
 
@@ -90,7 +102,7 @@ customElements.define('messages-app',
       const data = {
         type: 'message',
         data: this.message.value,
-        username: 'Maja',
+        username: JSON.parse(window.localStorage.getItem('username')),
         key: 'eDBE76deU7L0H9mEBgxUKVR0VCnq0XBd'
       }
       this.websocket.send(JSON.stringify(data))
