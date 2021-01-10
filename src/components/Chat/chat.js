@@ -60,52 +60,51 @@ customElements.define('messages-app',
       this.message = this.shadowRoot.querySelector('#message')
       this.send = this.shadowRoot.querySelector('.send-message')
       this.nickname = this.shadowRoot.querySelector('#nickname')
-      const chat = this.shadowRoot.querySelector('.chat-output')
+      this.chat = this.shadowRoot.querySelector('.chat-output')
       this.websocket = new WebSocket('wss://cscloud6-127.lnu.se/socket/')
     }
 
+    /**
+     * Called after the element is inserted into the DOM.
+     */
     connectedCallback () {
-      this.websocket.onmessage = function (event) {
-        const message = JSON.parse(event.data)
-        const messageOutput = `${message.username}: ${message.data}`
-        console.log(messageOutput)
+    /**
+     * Gets message from server.
+     *
+     * @param {object} event - MessageEvent from server
+     */
+      this.websocket.onmessage = (event) => {
+        const data = JSON.parse(event.data)
+        this.showMessage(`${data.username}: ${data.data}`)
       }
 
-      this.websocket.addEventListener('message', function (event) {
-        const message = JSON.parse(event.data)
-        const messageOutput = `${message.username}: ${message.data}`
-        console.log(messageOutput)
-      })
       this.send.addEventListener('click', () => {
-        const data = {
-          type: 'message',
-          data: this.message.value,
-          username: 'Maja',
-          key: 'eDBE76deU7L0H9mEBgxUKVR0VCnq0XBd'
-        }
-        console.log(data)
+        this.sendMessage()
       })
     }
 
+    /**
+     * Send message to server.
+     */
     sendMessage () {
       const data = {
         type: 'message',
-        data: 'hej',
+        data: this.message.value,
         username: 'Maja',
         key: 'eDBE76deU7L0H9mEBgxUKVR0VCnq0XBd'
       }
       this.websocket.send(JSON.stringify(data))
     }
+
+    /**
+     * Output message to chat window.
+     *
+     * @param {string} input - The message to be shown in chat window.
+     */
+    showMessage (input) {
+      const newMessage = document.createElement('p')
+      newMessage.textContent = input
+      this.chat.appendChild(newMessage)
+    }
   }
 )
-
-/*
-{
-  "type": "message",
-  "data" : this.message.value,
-  "username": "Maja",
-  "key": "eDBE76deU7L0H9mEBgxUKVR0VCnq0XBd"
-}
-The properties type, data, username and key are mandatory when sending a message to the server. The properties type, data and username will always be present when you receive a message from the server. Additionally, all properties sent from one user will be echoed to all receiving clients.
-message api key = eDBE76deU7L0H9mEBgxUKVR0VCnq0XBd
-*/
