@@ -36,7 +36,8 @@ template.innerHTML = `
 <div class="chat-output"> 
 </div>
 <form class ="message-form">
-<textarea id="message" placeholder="Write your message"> </textarea>
+<textarea id="message" placeholder="Write your message"> 
+</textarea>
 <input type="button" class="send-message" value="Send"/>
 </form>
 <form class="username-form">

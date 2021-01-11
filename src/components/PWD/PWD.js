@@ -32,8 +32,9 @@ template.innerHTML = `
 
 </style>
 <div class = "main">
-<messages-app draggable="true"></messages-app>
 <messages-app></messages-app>
+<messages-app></messages-app>
+<app-container></app-container>
 </div>
 <div class="footer"></div>
 
