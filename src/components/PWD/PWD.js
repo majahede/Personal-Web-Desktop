@@ -16,12 +16,14 @@ template.innerHTML = `
     height: 800px;
     width: 100%;
     background-color: blue;
+    position: relative;
   }
 
 .main {
   height: 100%;
   width: 100%;
   background-color: #f5d5d5;
+  position: relative;
 }
 
 .footer {
@@ -30,13 +32,25 @@ template.innerHTML = `
   background-color: #4b4646;
 }
 
+button {
+  background-color: coral;
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+}
+
+.icon  {
+  font-size: 30px;
+}
+
 </style>
 <div class = "main">
-<messages-app></messages-app>
-<messages-app></messages-app>
-<app-container></app-container>
 </div>
-<div class="footer"></div>
+<div class="footer">
+  <button id="chat"></button>
+  <button id="memory"></button>
+  <button id="custom"></button>
+</div>
 
 
 `
@@ -57,6 +71,26 @@ customElements.define('personal-web-desktop',
       // append the template to the shadow root.
       this.attachShadow({ mode: 'open' })
       this.shadowRoot.appendChild(template.content.cloneNode(true))
+      this.chatApp = this.shadowRoot.querySelector('#chat')
+      this.main = this.shadowRoot.querySelector('.main')
+    }
+
+    /**
+     * Called after the element is inserted into the DOM.
+     */
+    connectedCallback () {
+      this.chatApp.addEventListener('click', () => this.openApp('chat'))
+    }
+
+    /**
+     * Adds a new app container and sets a class attribute.
+     *
+     * @param {string} app - The class of the element to open.
+     */
+    openApp (app) {
+      const application = document.createElement('app-container')
+      application.class = app
+      this.main.appendChild(application)
     }
   }
 )

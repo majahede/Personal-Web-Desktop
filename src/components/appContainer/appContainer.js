@@ -17,11 +17,9 @@ template.innerHTML = `
   padding: 10px;
   float: left;
   position: aboslute;
-  z-index: 1000;
 }
 </style>
 <div class="container">
-  <messages-app></messages-app>
 </div>
 
 `
@@ -42,6 +40,7 @@ customElements.define('app-container',
       // append the template to the shadow root.
       this.attachShadow({ mode: 'open' })
       this.shadowRoot.appendChild(template.content.cloneNode(true))
+      this.container = this.shadowRoot.querySelector('.container')
     }
 
     /**
@@ -49,6 +48,26 @@ customElements.define('app-container',
      */
     connectedCallback () {
       this.addEventListener('mousedown', this.onDragStart)
+      if (this.class === 'chat') {
+        const chat = document.createElement('messages-app')
+        this.container.appendChild(chat)
+      }
+    }
+
+    /**
+     * Appends the correct application to the container depending on class.
+     */
+    appendApp () {
+      if (this.class === 'chat') {
+        const chat = document.createElement('messages-app')
+        this.container.appendChild(chat)
+      } else if (this.class === 'memory') {
+        const memory = document.createElement('memory')
+        this.container.appendChild(memory)
+      } else if (this.class === 'custom') {
+        const custom = document.createElement('custom-app')
+        this.container.appendChild(custom)
+      }
     }
 
     /**
@@ -60,6 +79,12 @@ customElements.define('app-container',
       event.target.style.position = 'absolute'
       event.target.style.zIndex = 1000
 
+      /**
+       * Updates the current position of the element.
+       *
+       * @param {number} pageX - Current X-coordinate.
+       * @param {number} pageY - Current Y-coordinate.
+       */
       function moveElement (pageX, pageY) {
         event.target.style.left = pageX - event.target.offsetWidth / 2 + 'px'
         event.target.style.top = pageY - event.target.offsetHeight / 2 + 'px'
@@ -67,12 +92,23 @@ customElements.define('app-container',
 
       moveElement(event.pageX, event.pageY)
 
+      /**
+       * Updates the current position of the element.
+       *
+       * @param {object} event - Object containing the current position.
+       */
       function onMouseMove (event) {
+        console.log(event)
         event.target.style.left = event.pageX - event.target.offsetWidth / 2 + 'px'
         event.target.style.top = event.pageY - event.target.offsetHeight / 2 + 'px'
       }
+
       this.addEventListener('mousemove', onMouseMove)
 
+      /**
+       * Makes element stop moving when mouse button is released.
+       *
+       */
       this.onmouseup = function () {
         this.removeEventListener('mousemove', onMouseMove)
         this.onmouseup = null
