@@ -22,7 +22,7 @@ template.innerHTML = `
 .main {
   height: 100%;
   width: 100%;
-  background-color: #f5d5d5;
+  background-color: #ffffff;
   position: relative;
 }
 

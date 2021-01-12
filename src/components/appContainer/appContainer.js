@@ -12,16 +12,37 @@ const template = document.createElement('template')
 template.innerHTML = `
 <style> 
 :host {
+
+}
+.container {
   display: block;
   background-color: black;
-  padding: 10px;
   float: left;
-  position: aboslute;
+  border: solid #440f88 3px;
+  border-radius: 5px;
 }
-</style>
-<div class="container">
-</div>
+.top-bar {
+  padding: 5px;
+  background-color: #440f88;
+  border-bottom: 
+}
 
+button {
+  height: 20px;
+  width: 20px;
+  position: relative;
+  left: 390px;
+ 
+}
+
+
+</style>
+
+<div class="container">
+<div class="top-bar">
+<button class ="exit"></button>
+</div>
+</div>
 `
 /**
  * Define custom element.
@@ -41,6 +62,7 @@ customElements.define('app-container',
       this.attachShadow({ mode: 'open' })
       this.shadowRoot.appendChild(template.content.cloneNode(true))
       this.container = this.shadowRoot.querySelector('.container')
+      this.topBar = this.shadowRoot.querySelector('.top-bar')
     }
 
     /**
@@ -98,7 +120,6 @@ customElements.define('app-container',
        * @param {object} event - Object containing the current position.
        */
       function onMouseMove (event) {
-        console.log(event)
         event.target.style.left = event.pageX - event.target.offsetWidth / 2 + 'px'
         event.target.style.top = event.pageY - event.target.offsetHeight / 2 + 'px'
       }

@@ -15,9 +15,10 @@ template.innerHTML = `
   display: block;
   height: 500px;
   width: 400px;
-  background-color: green;
+  background-color: #f3f3f3;
   padding: 10px;
   float: left;
+  z-index: 2;
 }
 
 .chat-output {
@@ -25,6 +26,7 @@ template.innerHTML = `
   height: 300px;
   width: 100%;
   background-color: white;
+  overflow: scroll;
 }
 
 #message {
@@ -32,7 +34,30 @@ template.innerHTML = `
   height: 100px;
 }
 
+.username-form {
+  padding-bottom: 10px;
+}
+
+.send-message {
+  background-color: #440f88;
+  color: #f3f3f3;
+  font-size: 1.2rem;
+  position: relative;
+  left: 325px;
+  border-radius: 5px;
+}
+
+.set-username {
+  background-color: #440f88;
+  color: #f3f3f3;
+  border-radius: 5px;
+}
+
 </style>
+<form class="username-form">
+<input id="username" placeholder="Your username"/>
+<input type="button" class="set-username" value="Save"/>
+</form>
 <div class="chat-output"> 
 </div>
 <form class ="message-form">
@@ -40,10 +65,7 @@ template.innerHTML = `
 </textarea>
 <input type="button" class="send-message" value="Send"/>
 </form>
-<form class="username-form">
-<input id="username" placeholder="Your username"/>
-<input type="button" class="set-username" value="Save"/>
-</form>
+
 
 `
 /**
