@@ -4,12 +4,6 @@
  * @author Maja Hedegärd <mh223pi@student.lnu.se>
  * @version 1.0.0
  */
-/* let imgNum = 0
-const imgURL = (new URL(`images/${imgNum}.png`, import.meta.url)).href
-const arrayOfImages = []
-for (let i = 0; i < 3; i++) {
-  imgNum++
-} */
 
 /**
  * Define template.
@@ -77,7 +71,7 @@ img {
 /**
  * Define custom element.
  */
-customElements.define('my-flipping-tile',
+customElements.define('flipping-tile',
   /**
    * @class
    */
