@@ -38,6 +38,10 @@ template.innerHTML = `
   box-shadow: 7px 7px 10px #acacac;
 }
 
+.tile[disabled] {
+  pointer-events: none;
+}
+
 img {
   width: 100%;
   height: 100%;
@@ -88,6 +92,7 @@ customElements.define('flipping-tile',
 
       // Get the tile element in the shadow root.
       this._tile = this.shadowRoot.querySelector('.tile')
+      this._mainTile = this.shadowRoot.querySelector('#main-tile')
       this._frontTile = this.shadowRoot.querySelector('.front')
     }
 
@@ -97,7 +102,7 @@ customElements.define('flipping-tile',
      * @returns {string[]} A string array of attributes to monitor.
      */
     static get observedAttributes () {
-      return ['src', 'hidden']
+      return ['src', 'hidden', 'disabled']
     }
 
     /**
@@ -105,7 +110,7 @@ customElements.define('flipping-tile',
      */
     connectedCallback () {
       this.addEventListener('dragstart', (event) => event.preventDefault())
-      this.addEventListener('click', () => this.flipTile())
+      this._tile.addEventListener('click', () => this.flipTile())
     }
 
     /**
@@ -120,7 +125,15 @@ customElements.define('flipping-tile',
         this._frontTile.setAttribute('src', newValue)
       }
       if (name === 'hidden') {
-        this._frontTile.setAttribute('hidden', newValue)
+        this._tile.setAttribute('hidden', newValue)
+      }
+
+      if (name === 'disabled') {
+        if (this._tile.hasAttribute('disabled')) {
+          this._tile.removeAttribute('disabled')
+        } else {
+          this._tile.setAttribute('disabled', newValue)
+        }
       }
     }
 

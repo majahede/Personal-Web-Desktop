@@ -67,8 +67,6 @@ customElements.define('memory-game',
       this.small.addEventListener('click', () => {
         this.setBoardSize('small')
         this.addTiles(4)
-        const tiles = Array.from(this.grid.children)
-        console.log(tiles)
       })
       this.medium.addEventListener('click', () => {
         this.setBoardSize('medium')
@@ -91,8 +89,8 @@ customElements.define('memory-game',
       const tiles = Array.from(this.grid.children)
       return {
         all: tiles,
-        faceUp: tiles.filter(tile => tile.hasAttribute('flipped')),
-        faceDown: tiles.filter(tile => !tile.hasAttribute('flipped'))
+        faceUp: tiles.filter(tile => tile.hasAttribute('flipped') && !tile.hasAttribute('hidden')),
+        hidden: tiles.filter(tile => tile.hasAttribute('hidden'))
       }
     }
 
@@ -161,20 +159,31 @@ customElements.define('memory-game',
       return images
     }
 
+    /**
+     * Check if flipped tiles are matching.
+     *
+     * @param {CustomEvent} event - The custom event.
+     */
     onTileFlip (event) {
       const tiles = this._tiles
-      
       const first = tiles.faceUp[0]
       const second = tiles.faceUp[1]
 
       if (tiles.faceUp.length === 2) {
-       if (first.isEqualNode(second)) {
-        // first.setAttribute('hidden', '')
-         console.log(first)
-         console.log(second)
-       }
+        tiles.all.forEach(tile => (tile.setAttribute('disabled', '')))
+
+        setTimeout(() => {
+          if (first.isEqualNode(second)) {
+          // It's a match.
+            first.setAttribute('hidden', '')
+            second.setAttribute('hidden', '')
+          } else {
+            first.removeAttribute('flipped')
+            second.removeAttribute('flipped')
+          }
+          tiles.all.forEach(tile => (tile.removeAttribute('disabled')))
+        }, 1200)
       }
-     //if()
     }
   }
 )
