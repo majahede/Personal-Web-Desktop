@@ -5,14 +5,6 @@
  * @version 1.0.0
  */
 
-let imgNum = 0
-const arrayOfImages = []
-for (let i = 0; i <= 8; i++) {
-  const imgURL = (new URL(`images/${imgNum}.png`, import.meta.url)).href
-  arrayOfImages.push(imgURL)
-  imgNum++
-}
-console.log(arrayOfImages)
 /**
  * Define template.
  */
@@ -34,7 +26,12 @@ template.innerHTML = `
 }
 
 </style>
-<div class="grid" id="large"> 
+<div class="options">
+  <button id="small">2x2</button>
+  <button id="medium">4x2</button>
+  <button id="large">4x4</button>
+<div>
+<div class="grid"> 
 </div>
 
 `
@@ -57,22 +54,97 @@ customElements.define('memory-game',
       this.shadowRoot.appendChild(template.content.cloneNode(true))
 
       this.grid = this.shadowRoot.querySelector('.grid')
+      this.small = this.shadowRoot.querySelector('#small')
+      this.medium = this.shadowRoot.querySelector('#medium')
+      this.large = this.shadowRoot.querySelector('#large')
+      this.onTileFlip = this.onTileFlip.bind(this)
     }
 
+    /**
+     * Called after the element is inserted into the DOM.
+     */
     connectedCallback () {
-      this.addTiles()
+      this.small.addEventListener('click', () => {
+        this.setBoardSize('small')
+        this.addTiles(4)
+        const tiles = Array.from(this.grid.children)
+        console.log(tiles)
+      })
+      this.medium.addEventListener('click', () => {
+        this.setBoardSize('medium')
+        this.addTiles(8)
+      })
+      this.large.addEventListener('click', () => {
+        this.setBoardSize('large')
+        this.addTiles(16)
+      })
+
+      this.grid.addEventListener('fliptile', this.onTileFlip)
     }
 
-    addTiles (size) {
-      for (let k = 0; k < 2; k++) {
-        for (let i = 1; i <= 8; i++) {
-          const tile = document.createElement('flipping-tile')
-          this.grid.appendChild(tile)
-          tile.setAttribute('src', `./images/${i}.png`)
-        }
+    /**
+     * Get tiles on gameboard.
+     *
+     * @returns {object} An object containing grouped tiles.
+     */
+    get _tiles () {
+      const tiles = Array.from(this.grid.children)
+      return {
+        all: tiles,
+        faceUp: tiles.filter(tile => tile.hasAttribute('flipped')),
+        faceDown: tiles.filter(tile => !tile.hasAttribute('flipped'))
       }
     }
 
+    /**
+     * Sets the size of the board.
+     *
+     * @param {string} boardSize - Type of game board.
+     */
+    setBoardSize (boardSize) {
+      this.grid.setAttribute('id', boardSize)
+      while (this.grid.firstElementChild) {
+        this.grid.firstElementChild.remove()
+      }
+    }
+
+    /**
+     * Adds tiles to game board.
+     *
+     * @param {number} boardSize - Number of tiles on the game board.
+     */
+    addTiles (boardSize) {
+      const images = this.createImageArray(`${boardSize / 2}`)
+      const shuffledImages = this.shuffle(images)
+      for (let i = 0; i < boardSize; i++) {
+        const tile = document.createElement('flipping-tile')
+        this.grid.appendChild(tile)
+        tile.setAttribute('src', shuffledImages[i])
+      }
+    }
+
+    /**
+     * Creates an array of images.
+     *
+     * @param {number} boardSize - The size of the gamee board.
+     * @returns {Array} The array of images.
+     */
+    createImageArray (boardSize) {
+      const arrayOfImages = []
+      for (let i = 1; i <= boardSize; i++) {
+        const image = `./images/${i}.png`
+        arrayOfImages.push(image)
+        arrayOfImages.push(image)
+      }
+      return arrayOfImages
+    }
+
+    /**
+     * Shuffles array of images.
+     *
+     * @param {Array} images - The array of images to shuffle.
+     * @returns {Array} The shuffled array.
+     */
     shuffle (images) {
       let i = images.length
       let j
@@ -87,6 +159,22 @@ customElements.define('memory-game',
         images[j] = x
       }
       return images
+    }
+
+    onTileFlip (event) {
+      const tiles = this._tiles
+      
+      const first = tiles.faceUp[0]
+      const second = tiles.faceUp[1]
+
+      if (tiles.faceUp.length === 2) {
+       if (first.isEqualNode(second)) {
+        // first.setAttribute('hidden', '')
+         console.log(first)
+         console.log(second)
+       }
+      }
+     //if()
     }
   }
 )

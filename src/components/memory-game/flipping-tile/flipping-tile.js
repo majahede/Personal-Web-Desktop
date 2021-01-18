@@ -33,7 +33,7 @@ template.innerHTML = `
   transition: 1s;
 }
 
-.tile:focus {
+.tile:hover {
   outline: none;
   box-shadow: 7px 7px 10px #acacac;
 }
@@ -97,13 +97,14 @@ customElements.define('flipping-tile',
      * @returns {string[]} A string array of attributes to monitor.
      */
     static get observedAttributes () {
-      return ['src']
+      return ['src', 'hidden']
     }
 
     /**
      * Called after the element is inserted into the DOM.
      */
     connectedCallback () {
+      this.addEventListener('dragstart', (event) => event.preventDefault())
       this.addEventListener('click', () => this.flipTile())
     }
 
@@ -117,6 +118,9 @@ customElements.define('flipping-tile',
     attributeChangedCallback (name, oldValue, newValue) {
       if (name === 'src') {
         this._frontTile.setAttribute('src', newValue)
+      }
+      if (name === 'hidden') {
+        this._frontTile.setAttribute('hidden', newValue)
       }
     }
 
@@ -135,8 +139,12 @@ customElements.define('flipping-tile',
         this.removeAttribute('flipped')
       } else {
         this.setAttribute('flipped', '')
-        console.log(this._frontTile.src)
       }
+
+      this.dispatchEvent(new CustomEvent('fliptile', {
+        bubbles: true,
+        detail: { flipped: this.hasAttribute('flipped') }
+      }))
     }
   }
 )

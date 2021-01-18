@@ -46,7 +46,6 @@ button {
 </style>
 <div class = "main">
   <memory-game><memory-game>
-  <flipping-tile></flipping-tile>
 </div>
 <div class="footer">
   <button id="chat"></button>
