@@ -13,8 +13,8 @@ template.innerHTML = `
   <style>
   :host {
     display: block;
-    height: 100px;
-    width: 100px;
+    height: 80px;
+    width: 80px;
     position: relative;
     perspective: 800px;
   }

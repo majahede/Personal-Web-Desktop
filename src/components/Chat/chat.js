@@ -15,7 +15,7 @@ template.innerHTML = `
   display: block;
   height: 500px;
   width: 400px;
-  background-color: #f3f3f3;
+  background-color: #bc8afd;
   padding: 10px;
   float: left;
   z-index: 2;

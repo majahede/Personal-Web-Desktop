@@ -12,36 +12,41 @@ const template = document.createElement('template')
 template.innerHTML = `
 <style> 
 :host {
+  
 
 }
 .container {
   display: block;
-  background-color: black;
   float: left;
-  border: solid #440f88 3px;
+  border: solid #f3f3f3 3px;
   border-radius: 5px;
-}
-.top-bar {
-  padding: 5px;
-  background-color: #440f88;
-  border-bottom: 
+  z-index: 2;
 }
 
-button {
+.top-bar {
+  padding: 5px;
+  background-color: #f3f3f3;
+ 
+}
+
+.exit {
   height: 20px;
   width: 20px;
-  position: relative;
-  left: 390px;
- 
+  
+}
+
+.main {
+ padding: 10px;
 }
 
 
 </style>
 
 <div class="container">
-<div class="top-bar">
-<button class ="exit"></button>
-</div>
+    <div class="top-bar">
+    <button class ="exit"></button>
+    </div>
+  <div class="main"></div>
 </div>
 `
 /**
@@ -63,17 +68,20 @@ customElements.define('app-container',
       this.shadowRoot.appendChild(template.content.cloneNode(true))
       this.container = this.shadowRoot.querySelector('.container')
       this.topBar = this.shadowRoot.querySelector('.top-bar')
+      this.exitButton = this.shadowRoot.querySelector('.exit')
+      this.main = this.shadowRoot.querySelector('.main')
     }
 
     /**
      * Called after the element is inserted into the DOM.
      */
     connectedCallback () {
-      this.addEventListener('mousedown', this.onDragStart)
-      if (this.class === 'chat') {
-        const chat = document.createElement('messages-app')
-        this.container.appendChild(chat)
-      }
+      this.topBar.addEventListener('mousedown', this.onDragStart)
+      this.exitButton.addEventListener('click', event => {
+        event.preventDefault()
+      })
+
+      this.appendApp()
     }
 
     /**
@@ -82,13 +90,13 @@ customElements.define('app-container',
     appendApp () {
       if (this.class === 'chat') {
         const chat = document.createElement('messages-app')
-        this.container.appendChild(chat)
+        this.main.appendChild(chat)
       } else if (this.class === 'memory') {
-        const memory = document.createElement('memory')
-        this.container.appendChild(memory)
+        const memory = document.createElement('memory-game')
+        this.main.appendChild(memory)
       } else if (this.class === 'custom') {
         const custom = document.createElement('custom-app')
-        this.container.appendChild(custom)
+        this.main.appendChild(custom)
       }
     }
 
@@ -98,8 +106,13 @@ customElements.define('app-container',
      * @param {object} event - Object containing the current position.
      */
     onDragStart (event) {
-      event.target.style.position = 'absolute'
-      event.target.style.zIndex = 1000
+      if (event.target.classList.contains('exit')) {
+        console.log('stäng')
+        this.parentNode.remove()
+      }
+      console.log(event.target.parentNode)
+      event.target.parentNode.style.position = 'absolute'
+      event.target.parentNode.style.zIndex = 1000
 
       /**
        * Updates the current position of the element.
@@ -108,8 +121,8 @@ customElements.define('app-container',
        * @param {number} pageY - Current Y-coordinate.
        */
       function moveElement (pageX, pageY) {
-        event.target.style.left = pageX - event.target.offsetWidth / 2 + 'px'
-        event.target.style.top = pageY - event.target.offsetHeight / 2 + 'px'
+        event.target.parentNode.style.left = pageX - event.target.offsetWidth / 2 + 'px'
+        event.target.parentNode.style.top = pageY - event.target.offsetHeight / 2 + 'px'
       }
 
       moveElement(event.pageX, event.pageY)
@@ -120,8 +133,8 @@ customElements.define('app-container',
        * @param {object} event - Object containing the current position.
        */
       function onMouseMove (event) {
-        event.target.style.left = event.pageX - event.target.offsetWidth / 2 + 'px'
-        event.target.style.top = event.pageY - event.target.offsetHeight / 2 + 'px'
+        event.target.parentNode.style.left = event.pageX - event.target.offsetWidth / 2 + 'px'
+        event.target.parentNode.style.top = event.pageY - event.target.offsetHeight / 2 + 'px'
       }
 
       this.addEventListener('mousemove', onMouseMove)

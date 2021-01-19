@@ -73,6 +73,8 @@ customElements.define('personal-web-desktop',
       this.attachShadow({ mode: 'open' })
       this.shadowRoot.appendChild(template.content.cloneNode(true))
       this.chatApp = this.shadowRoot.querySelector('#chat')
+      this.memoryApp = this.shadowRoot.querySelector('#memory')
+      this.customApp = this.shadowRoot.querySelector('#custom')
       this.main = this.shadowRoot.querySelector('.main')
     }
 
@@ -81,6 +83,8 @@ customElements.define('personal-web-desktop',
      */
     connectedCallback () {
       this.chatApp.addEventListener('click', () => this.openApp('chat'))
+      this.memoryApp.addEventListener('click', () => this.openApp('memory'))
+    // this.customApp.addEventListener('click', () => this.openApp('custom'))
     }
 
     /**

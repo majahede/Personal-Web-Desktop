@@ -11,18 +11,32 @@
 const template = document.createElement('template')
 template.innerHTML = `
 <style>
+:host {
+  display: block;
+  min-height: 200px;
+  min-width: 180px;
+}
 .grid#large, .grid#medium{
   display: grid;
-  grid-template-columns: repeat(4, 100px);
+  grid-template-columns: repeat(4, 80px);
   gap: 1rem;
   color: #cccccc;
 }
 
 .grid#small {
   display: grid;
-  grid-template-columns: repeat(2, 100px);
+  grid-template-columns: repeat(2, 80px);
   gap: 1rem;
   color: #cccccc;
+  margin-left: 10px;
+}
+
+button {
+  font-size: 1rem;
+  margin: 10px;
+}
+
+h2 {
 }
 
 </style>
@@ -58,6 +72,7 @@ customElements.define('memory-game',
       this.medium = this.shadowRoot.querySelector('#medium')
       this.large = this.shadowRoot.querySelector('#large')
       this.onTileFlip = this.onTileFlip.bind(this)
+      this.attempts = 0
     }
 
     /**
@@ -118,6 +133,7 @@ customElements.define('memory-game',
         const tile = document.createElement('flipping-tile')
         this.grid.appendChild(tile)
         tile.setAttribute('src', shuffledImages[i])
+        this.attempts = 0
       }
     }
 
@@ -177,9 +193,19 @@ customElements.define('memory-game',
           // It's a match.
             first.setAttribute('hidden', '')
             second.setAttribute('hidden', '')
+            this.attempts += 1
+            if (tiles.all.length === (tiles.hidden.length + 2)) {
+              while (this.grid.firstElementChild) {
+                this.grid.removeChild(this.grid.firstElementChild)
+              }
+              const gameover = document.createElement('h2')
+              gameover.textContent = `You made it in ${this.attempts} attempts! Try again?`
+              this.grid.appendChild(gameover)
+            }
           } else {
             first.removeAttribute('flipped')
             second.removeAttribute('flipped')
+            this.attempts += 1
           }
           tiles.all.forEach(tile => (tile.removeAttribute('disabled')))
         }, 1200)
