@@ -45,7 +45,6 @@ button {
 
 </style>
 <div class = "main">
-<custom-app></custom-app>
 </div>
 <div class="footer">
   <button id="chat"></button>
@@ -84,7 +83,10 @@ customElements.define('personal-web-desktop',
     connectedCallback () {
       this.chatApp.addEventListener('click', () => this.openApp('chat'))
       this.memoryApp.addEventListener('click', () => this.openApp('memory'))
-    // this.customApp.addEventListener('click', () => this.openApp('custom'))
+      this.customApp.addEventListener('click', () => this.openApp('custom'))
+      const applikation = document.createElement('app-container')
+      applikation.class = 'custom'
+      this.main.appendChild(applikation)
     }
 
     /**

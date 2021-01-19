@@ -16,6 +16,7 @@ template.innerHTML = `
 
 }
 .container {
+  background-color: white;
   display: block;
   float: left;
   border: solid #f3f3f3 3px;
@@ -24,19 +25,19 @@ template.innerHTML = `
 }
 
 .top-bar {
-  padding: 5px;
+  padding: 3px;
   background-color: #f3f3f3;
  
 }
 
 .exit {
-  height: 20px;
-  width: 20px;
+  height: 18px;
+  width: 18px;
   
 }
 
 .main {
- padding: 10px;
+
 }
 
 

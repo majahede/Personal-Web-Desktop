@@ -10,23 +10,71 @@
  */
 const template = document.createElement('template')
 template.innerHTML = `
+<style> 
+:host {
+  background-color:  #ffc420;
+}
+
+.container {
+  background-color: #01053f;
+  padding: 20px;
+}
+
+.title {
+  font-size: 1.2rem;
+  text-align: center;
+  color:  #ffc420;
+}
+
+h3 {
+  display: inline;
+  color:  #ffc420;
+}
+
+#convert {
+  font-size: 1.2rem;
+  background-color: #ffc420;
+  border-radius: 10px;
+  border: none;
+}
+
+#amount, select {
+  font-size: 1.1rem;
+  border-radius: 10px;
+  border: none;
+  padding: 2px;
+  color: #01053f
+}
+
+.result {
+  padding-top: 10px;
+  font-size: 2rem;
+  text-align: center;
+}
 
 
+</style>
 <div class="container">
-  <form id="currency">
-  <div class="from">
-    <select id="from-currency">
-      <option>Convert from</option>
-    </select>
-    <input type="text" id="amount"/>
+  <div class="title">
+    <h2>Currency Converter</h2>
   </div>
-  <div>
+  <div class="currencyConverter">
+    <h3>Amount</h3>
+    <h3>From</h3>
+    <h3>To</h3>
+    <form>
+    <input type="text" id="amount" name="amount" value="1"/>
+    <select id="from-currency" value="EUR" name="from">
+      <option>EUR</option>
+    </select>
     <select id="to-currency">
-      <option>Convert to</option>
-    </select>
-    <output></output>
+      <option>SEK</option>
+    </select>  
+    <input type="button" id="convert" value="Convert"/>
+    <form>
   </div>
-</form>
+  <div class="result">
+  </div>
 </div>
 `
 /**
@@ -49,6 +97,8 @@ customElements.define('custom-app',
       this.fromCurrency = this.shadowRoot.querySelector('#from-currency')
       this.toCurrency = this.shadowRoot.querySelector('#to-currency')
       this.amount = this.shadowRoot.querySelector('#amount')
+      this.convert = this.shadowRoot.querySelector('#convert')
+      this.result = this.shadowRoot.querySelector('.result')
     }
 
     /**
@@ -56,10 +106,9 @@ customElements.define('custom-app',
      */
     connectedCallback () {
       this.addCurrency()
-
-      this.fromCurrency.addEventListener('change', async (event) => {
-        console.log(await this.convertCurrency())
-        console.log(await this.getCurrency())
+      this.convert.addEventListener('click', event => {
+        event.preventDefault()
+        this.convertCurrency()
       })
     }
 
@@ -118,7 +167,7 @@ customElements.define('custom-app',
         }
       }
       const result = (currency.EUR / firstCurrency) * secondCurrency * amount
-      return result.toFixed(2)
+      this.result.textContent = ` ${this.amount.value} ${this.fromCurrency.value} = ${this.toCurrency.value} ${result.toFixed(2)}`
     }
   }
 )
