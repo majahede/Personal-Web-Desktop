@@ -45,7 +45,7 @@ button {
 
 </style>
 <div class = "main">
-  <memory-game><memory-game>
+<custom-app></custom-app>
 </div>
 <div class="footer">
   <button id="chat"></button>
