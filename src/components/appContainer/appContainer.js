@@ -19,7 +19,7 @@ template.innerHTML = `
   background-color: white;
   display: block;
   float: left;
-  border: solid #f3f3f3 3px;
+  border: solid #dfdede 2px;
   border-radius: 5px;
   z-index: 2;
 }

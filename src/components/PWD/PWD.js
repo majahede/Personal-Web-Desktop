@@ -12,31 +12,36 @@ const template = document.createElement('template')
 template.innerHTML = `
 <style> 
 :host {
+    box-sizing: border-box;
     display: block;
-    height: 800px;
     width: 100%;
-    background-color: blue;
+    height: 100%;
     position: relative;
+   
   }
 
 .main {
-  height: 100%;
+  background-image: url(../images/color-2174045.png);
+  background-size: cover;
+  background-position: center;
+  height: 94%;
   width: 100%;
-  background-color: #ffffff;
   position: relative;
 }
 
 .footer {
-  height: 70px;
+  height: 6%;
   width: 100%;
-  background-color: #4b4646;
+  background-color: #f3f3f3;
 }
 
 button {
-  background-color: coral;
-  width: 50px;
-  height: 50px;
+  box-shadow: 2px 2px 2px #dfdede;
+  margin: 10px 5px;
+  width: 42px;
+  height: 42px;
   border-radius: 10px;
+  border: 1px solid #dfdede;
 }
 
 .icon  {
