@@ -52,6 +52,13 @@ h3 {
   text-align: center;
 }
 
+h3 {
+  padding-right: 22px;
+}
+
+.amount {
+  padding-right: 158px;
+}
 
 </style>
 <div class="container">
@@ -59,7 +66,7 @@ h3 {
     <h2>Currency Converter</h2>
   </div>
   <div class="currencyConverter">
-    <h3>Amount</h3>
+    <h3 class="amount">Amount </h3>
     <h3>From</h3>
     <h3>To</h3>
     <form>
@@ -167,7 +174,7 @@ customElements.define('custom-app',
         }
       }
       const result = (currency.EUR / firstCurrency) * secondCurrency * amount
-      this.result.textContent = ` ${this.amount.value} ${this.fromCurrency.value} = ${this.toCurrency.value} ${result.toFixed(2)}`
+      this.result.textContent = ` ${this.amount.value} ${this.fromCurrency.value} =  ${result.toFixed(2)} ${this.toCurrency.value}`
     }
   }
 )

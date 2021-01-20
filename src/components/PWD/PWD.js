@@ -33,28 +33,45 @@ template.innerHTML = `
   height: 6%;
   width: 100%;
   background-color: #f3f3f3;
+
 }
 
 button {
   box-shadow: 2px 2px 2px #dfdede;
-  margin: 10px 5px;
   width: 42px;
   height: 42px;
   border-radius: 10px;
   border: 1px solid #dfdede;
+  margin-top: 10px;
+  margin-left: 10px;
 }
 
 .icon  {
-  font-size: 30px;
+  font-size: 25px;
+}
+
+#custom {
+  color: #ffc420;
+  background-color: #01053f;
+}
+
+#memory {
+  color: red;
+  background-color: blue;
+}
+
+#chat {
+  color: purple;
 }
 
 </style>
 <div class = "main">
 </div>
 <div class="footer">
-  <button id="chat"></button>
-  <button id="memory"></button>
-  <button id="custom"></button>
+  <button id="chat"><ion-icon class="icon" name="chatbubble"></ion-icon></button>
+  <button id="memory"><ion-icon class="icon" name="help"></ion-icon></button>
+  <button id="custom"><ion-icon class="icon" name="logo-euro"></ion-icon>
+</button>
 </div>
 
 
