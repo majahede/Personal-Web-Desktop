@@ -56,8 +56,8 @@ button {
 }
 
 #memory {
-  color: red;
-  background-color: blue;
+  color: black;
+  background-color: #ff9924;
 }
 
 #chat {
@@ -107,7 +107,7 @@ customElements.define('personal-web-desktop',
       this.memoryApp.addEventListener('click', () => this.openApp('memory'))
       this.customApp.addEventListener('click', () => this.openApp('custom'))
       const applikation = document.createElement('app-container')
-      applikation.class = 'custom'
+      applikation.class = 'memory'
       this.main.appendChild(applikation)
     }
 

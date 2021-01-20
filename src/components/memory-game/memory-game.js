@@ -13,37 +13,89 @@ template.innerHTML = `
 <style>
 :host {
   display: block;
-  min-height: 200px;
-  min-width: 180px;
+  background-color: #fff;
 }
+
+:host([dark]) {
+  background-color: #2b2b2b;
+}
+
 .grid#large, .grid#medium{
   display: grid;
   grid-template-columns: repeat(4, 80px);
   gap: 1rem;
-  color: #cccccc;
+  padding: 20px;
+ 
 }
 
 .grid#small {
   display: grid;
   grid-template-columns: repeat(2, 80px);
   gap: 1rem;
-  color: #cccccc;
   margin-left: 10px;
+  padding: 20px;
 }
 
-button {
+.size {
   font-size: 1rem;
-  margin: 10px;
+  background-color: #ff9924;
+  margin-top: 20px;
+  margin-left: 20px;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 20px;
+  cursor: pointer;
 }
 
-h2 {
+input[type=checkbox]{
+visibility: hidden;
+}
+
+label {
+  display: block;
+  cursor: pointer;
+  width: 50px;
+  height: 25px;
+  background: #2b2b2b;
+  border-radius: 15px;
+  position: relative;
+  float: right;
+  margin-top: 20px;
+  margin-right: 20px;
+}
+
+label:after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: #ff9924;
+  border-radius: 90px;
+  transition: 0.2s;
+}
+
+input:checked + label {
+  background: #fff;
+}
+
+input:checked + label:after {
+  left: calc(100% - 2px);
+  transform: translateX(-100%);
+}
+
+label:active:after {
+  width: 25px;
 }
 
 </style>
 <div class="options">
-  <button id="small">2x2</button>
-  <button id="medium">4x2</button>
-  <button id="large">4x4</button>
+  <button class="size" id="small">2x2</button>
+  <button class="size" id="medium">4x2</button>
+  <button class="size" id="large">4x4</button>
+  <input type="checkbox" id="switch"/>
+  <label for="switch"></label>
 <div>
 <div class="grid"> 
 </div>
@@ -73,12 +125,23 @@ customElements.define('memory-game',
       this.large = this.shadowRoot.querySelector('#large')
       this.onTileFlip = this.onTileFlip.bind(this)
       this.attempts = 0
+      this.switch = this.shadowRoot.querySelector('#switch')
     }
 
     /**
      * Called after the element is inserted into the DOM.
      */
     connectedCallback () {
+      this.setBoardSize('large')
+      this.addTiles(16)
+      this.switch.addEventListener('change', () => {
+        if (this.switch.checked) {
+          this.setAttribute('dark', '')
+        } else {
+          this.removeAttribute('dark', '')
+        }
+      })
+
       this.small.addEventListener('click', () => {
         this.setBoardSize('small')
         this.addTiles(4)

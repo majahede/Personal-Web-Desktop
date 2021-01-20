@@ -24,18 +24,18 @@ template.innerHTML = `
   }
 
 .tile {
+  border-radius: 20px;
   height: 100%;
   width: 100%;  
   position: relative;
   border: none;
-  box-shadow: 2px 2px 10px #d1d1d1;
   transform-style: preserve-3d;
   transition: 1s;
+  cursor: pointer;
 }
 
 .tile:hover {
   outline: none;
-  box-shadow: 7px 7px 10px #acacac;
 }
 
 .tile[disabled] {
@@ -49,6 +49,7 @@ img {
 
 .front, .back {
   position: absolute;
+  border-radius: 20px;
   top: 0;
   left: 0;
   backface-visibility: hidden;
@@ -56,10 +57,11 @@ img {
 
 .front {
   transform: rotateY(180deg);
+  background-color: white;
 }
 
 .back {
-  background-color: #ccc;
+  background: #ff9924;
 }
 
   </style>
