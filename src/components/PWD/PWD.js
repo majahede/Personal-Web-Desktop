@@ -44,11 +44,11 @@ button {
   border: 1px solid #dfdede;
   margin-top: 10px;
   margin-left: 10px;
+  font-size: 25px;
+  outline: none;
+  cursor: pointer;
 }
 
-.icon  {
-  font-size: 25px;
-}
 
 #custom {
   color: #ffc420;
@@ -61,17 +61,18 @@ button {
 }
 
 #chat {
-  color: purple;
+  background-color: purple;
+  font-size: 20px;
+  margin-bottom: 20px;
 }
 
 </style>
 <div class = "main">
 </div>
 <div class="footer">
-  <button id="chat"><ion-icon class="icon" name="chatbubble"></ion-icon></button>
-  <button id="memory"><ion-icon class="icon" name="help"></ion-icon></button>
-  <button id="custom"><ion-icon class="icon" name="logo-euro"></ion-icon>
-</button>
+  <button id="chat">💬</button>
+  <button id="memory">?</button>
+  <button id="custom">€</button>
 </div>
 
 
@@ -107,7 +108,7 @@ customElements.define('personal-web-desktop',
       this.memoryApp.addEventListener('click', () => this.openApp('memory'))
       this.customApp.addEventListener('click', () => this.openApp('custom'))
       const applikation = document.createElement('app-container')
-      applikation.class = 'memory'
+      applikation.class = 'custom'
       this.main.appendChild(applikation)
     }
 

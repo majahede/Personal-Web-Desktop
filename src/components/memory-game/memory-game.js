@@ -36,6 +36,7 @@ template.innerHTML = `
   padding: 20px;
 }
 
+
 .size {
   font-size: 1rem;
   background-color: #ff9924;
@@ -45,6 +46,12 @@ template.innerHTML = `
   padding: 5px 10px;
   border-radius: 20px;
   cursor: pointer;
+  outline: none;
+  transition:0s;
+}
+
+.size:focus, .size:hover {
+  transform: scale(0.95);
 }
 
 input[type=checkbox]{
@@ -89,6 +96,11 @@ label:active:after {
   width: 25px;
 }
 
+h2 {
+  color: orange;
+  margin: 30px 10px 0px 10px;
+}
+
 </style>
 <div class="options">
   <button class="size" id="small">2x2</button>
@@ -97,6 +109,8 @@ label:active:after {
   <input type="checkbox" id="switch"/>
   <label for="switch"></label>
 <div>
+<div id="gameover">
+</div>
 <div class="grid"> 
 </div>
 
@@ -126,6 +140,7 @@ customElements.define('memory-game',
       this.onTileFlip = this.onTileFlip.bind(this)
       this.attempts = 0
       this.switch = this.shadowRoot.querySelector('#switch')
+      this.gameover = this.shadowRoot.querySelector('#gameover')
     }
 
     /**
@@ -190,6 +205,9 @@ customElements.define('memory-game',
      * @param {number} boardSize - Number of tiles on the game board.
      */
     addTiles (boardSize) {
+      while (this.gameover.firstElementChild) {
+        this.gameover.firstElementChild.remove()
+      }
       const images = this.createImageArray(`${boardSize / 2}`)
       const shuffledImages = this.shuffle(images)
       for (let i = 0; i < boardSize; i++) {
@@ -257,20 +275,20 @@ customElements.define('memory-game',
             first.setAttribute('hidden', '')
             second.setAttribute('hidden', '')
             this.attempts += 1
-            if (tiles.all.length === (tiles.hidden.length + 2)) {
-              while (this.grid.firstElementChild) {
-                this.grid.removeChild(this.grid.firstElementChild)
-              }
-              const gameover = document.createElement('h2')
-              gameover.textContent = `You made it in ${this.attempts} attempts! Try again?`
-              this.grid.appendChild(gameover)
-            }
           } else {
             first.removeAttribute('flipped')
             second.removeAttribute('flipped')
             this.attempts += 1
           }
           tiles.all.forEach(tile => (tile.removeAttribute('disabled')))
+          if (tiles.all.length === (tiles.hidden.length + 2)) {
+            while (this.grid.firstElementChild) {
+              this.grid.removeChild(this.grid.firstElementChild)
+            }
+            const output = document.createElement('h2')
+            output.textContent = `You made it in ${this.attempts} attempts! Try again?`
+            this.gameover.appendChild(output)
+          }
         }, 1200)
       }
     }

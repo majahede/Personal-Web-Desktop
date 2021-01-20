@@ -11,10 +11,7 @@
 const template = document.createElement('template')
 template.innerHTML = `
 <style> 
-:host {
-  
 
-}
 .container {
   background-color: white;
   display: block;
@@ -27,13 +24,19 @@ template.innerHTML = `
 .top-bar {
   padding: 3px;
   background-color: #f3f3f3;
- 
+  position: relative;
+  height: 18px;
 }
 
 .exit {
   height: 18px;
   width: 18px;
-  
+  position: absolute;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
 }
 
 .main {
@@ -45,7 +48,7 @@ template.innerHTML = `
 
 <div class="container">
     <div class="top-bar">
-    <button class ="exit"></button>
+    <button class ="exit">X</button>
     </div>
   <div class="main"></div>
 </div>
@@ -108,7 +111,6 @@ customElements.define('app-container',
      */
     onDragStart (event) {
       if (event.target.classList.contains('exit')) {
-        console.log('stäng')
         this.parentNode.remove()
       }
       console.log(event.target.parentNode)

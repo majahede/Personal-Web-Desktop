@@ -29,6 +29,7 @@ template.innerHTML = `
 h3 {
   display: inline;
   color:  #ffc420;
+  padding-right: 28px;
 }
 
 #convert {
@@ -36,28 +37,36 @@ h3 {
   background-color: #ffc420;
   border-radius: 10px;
   border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+#convert:focus, #convert:hover {
+  background-color: #faba0b;
 }
 
 #amount, select {
   font-size: 1.1rem;
   border-radius: 10px;
   border: none;
-  padding: 2px;
-  color: #01053f
+  padding: 2px 5px;
+  color: #01053f;
+  outline: none;
+}
+
+#amount:focus, select:focus {
+  background-color: #e9e8e8;
 }
 
 .result {
   padding-top: 10px;
   font-size: 2rem;
   text-align: center;
-}
-
-h3 {
-  padding-right: 22px;
+  color: #ffc420;
 }
 
 .amount {
-  padding-right: 158px;
+  padding-right: 160px;
 }
 
 </style>
@@ -69,8 +78,8 @@ h3 {
     <h3 class="amount">Amount </h3>
     <h3>From</h3>
     <h3>To</h3>
-    <form>
-    <input type="text" id="amount" name="amount" value="1"/>
+    <form autocomplete="off">
+    <input type="number" id="amount" name="amount" value="1"/>
     <select id="from-currency" value="EUR" name="from">
       <option>EUR</option>
     </select>

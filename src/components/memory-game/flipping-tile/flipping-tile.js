@@ -23,19 +23,26 @@ template.innerHTML = `
     transform: rotateY(180deg);
   }
 
+  
 .tile {
   border-radius: 20px;
   height: 100%;
   width: 100%;  
   position: relative;
-  border: none;
   transform-style: preserve-3d;
   transition: 1s;
   cursor: pointer;
+  border: none;
+  outline: none;
 }
 
-.tile:hover {
-  outline: none;
+.tile:focus, .tile:hover {
+  transform: scale(0.9);
+}
+
+
+.tile:active {
+  background-color: purple;
 }
 
 .tile[disabled] {
@@ -60,8 +67,10 @@ img {
   background-color: white;
 }
 
+
 .back {
   background: #ff9924;
+  
 }
 
   </style>
