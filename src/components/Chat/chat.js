@@ -14,24 +14,32 @@ template.innerHTML = `
 :host {
   display: block;
   height: 500px;
-  width: 400px;
-  background-color: #bc8afd;
+  width: 410px;
   padding: 10px;
   float: left;
-  z-index: 2;
+  background-color:  #440f88;
 }
 
 .chat-output {
   display: block;
   height: 300px;
-  width: 100%;
+  width: 404px;
   background-color: white;
-  overflow: scroll;
+  overflow-y: scroll;
+  border: 3px solid #440f88;
+  outline: none;
 }
 
 #message {
-  width: 95%;
+  width: 400px;
   height: 100px;
+  border: 3px solid #440f88;
+  border-top: none;
+  outline: none;
+}
+
+p {
+  padding-left: 10px;
 }
 
 .username-form {
@@ -39,23 +47,28 @@ template.innerHTML = `
 }
 
 .send-message {
-  background-color: #440f88;
-  color: #f3f3f3;
+  background-color: #fff;
+  color: #440f88;
   font-size: 1.2rem;
   position: relative;
   left: 325px;
-  border-radius: 5px;
+  border-radius: 20px;
+  border: none;
+  padding: 5px 10px;
+  margin-top: 10px;
 }
 
 .set-username {
-  background-color: #440f88;
-  color: #f3f3f3;
-  border-radius: 5px;
+  background-color: #fff;
+  color: #440f88;
+  border-radius: 10px;
+  border: none;
+  padding: 4px 8px;
 }
 
 </style>
-<form class="username-form">
-<input id="username" placeholder="Your username"/>
+<form autocomplete="off" class="username-form">
+<input id="username" placeholder="Enter username"/>
 <input type="button" class="set-username" value="Save"/>
 </form>
 <div class="chat-output"> 

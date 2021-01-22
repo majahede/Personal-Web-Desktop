@@ -17,7 +17,8 @@ template.innerHTML = `
     width: 100%;
     height: 100%;
     position: relative;
-   
+    overflow: hidden;
+    z-index: 1;
   }
 
 .main {
@@ -33,7 +34,6 @@ template.innerHTML = `
   height: 6%;
   width: 100%;
   background-color: #f3f3f3;
-
 }
 
 button {
@@ -61,7 +61,7 @@ button {
 }
 
 #chat {
-  background-color: purple;
+  background-color:  #440f88;
   font-size: 20px;
   margin-bottom: 20px;
 }
@@ -108,7 +108,7 @@ customElements.define('personal-web-desktop',
       this.memoryApp.addEventListener('click', () => this.openApp('memory'))
       this.customApp.addEventListener('click', () => this.openApp('custom'))
       const applikation = document.createElement('app-container')
-      applikation.class = 'custom'
+      applikation.class = 'chat'
       this.main.appendChild(applikation)
     }
 

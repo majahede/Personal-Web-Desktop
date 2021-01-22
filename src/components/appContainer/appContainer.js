@@ -18,7 +18,8 @@ template.innerHTML = `
   float: left;
   border: solid #dfdede 2px;
   border-radius: 5px;
-  z-index: 2;
+  position: absolute;
+  z-index: 5;
 }
 
 .top-bar {
@@ -26,7 +27,7 @@ template.innerHTML = `
   background-color: #f3f3f3;
   position: relative;
   height: 18px;
-}
+} 
 
 .exit {
   height: 18px;
@@ -37,9 +38,10 @@ template.innerHTML = `
   align-items: center;
   justify-content: center;
   font-size: 1.1rem;
+  cursor: pointer;
 }
 
-.main {
+.hold {
 
 }
 
@@ -80,11 +82,10 @@ customElements.define('app-container',
      * Called after the element is inserted into the DOM.
      */
     connectedCallback () {
-      this.topBar.addEventListener('mousedown', this.onDragStart)
-      this.exitButton.addEventListener('click', event => {
-        event.preventDefault()
+    // this.topBar.addEventListener('mousedown', this.onDragStart, false)
+      document.addEventListener('mousedown', event => {
+        this.onDragStart(event)
       })
-
       this.appendApp()
     }
 
@@ -110,45 +111,38 @@ customElements.define('app-container',
      * @param {object} event - Object containing the current position.
      */
     onDragStart (event) {
-      if (event.target.classList.contains('exit')) {
-        this.parentNode.remove()
+      console.log(event)
+      const target = event.path[0]
+      if (target.classList.contains('exit')) {
+        const topbar = target.parentNode
+        topbar.parentNode.remove()
       }
-      console.log(event.target.parentNode)
-      event.target.parentNode.style.position = 'absolute'
-      event.target.parentNode.style.zIndex = 1000
+      if (target === this.topBar) {
+        const shiftX = event.clientX - target.parentNode.getBoundingClientRect().left
+        const shiftY = event.clientY - target.parentNode.getBoundingClientRect().top
 
-      /**
-       * Updates the current position of the element.
-       *
-       * @param {number} pageX - Current X-coordinate.
-       * @param {number} pageY - Current Y-coordinate.
-       */
-      function moveElement (pageX, pageY) {
-        event.target.parentNode.style.left = pageX - event.target.offsetWidth / 2 + 'px'
-        event.target.parentNode.style.top = pageY - event.target.offsetHeight / 2 + 'px'
-      }
+        target.parentNode.style.zIndex = 1000
 
-      moveElement(event.pageX, event.pageY)
-
-      /**
-       * Updates the current position of the element.
-       *
-       * @param {object} event - Object containing the current position.
-       */
-      function onMouseMove (event) {
-        event.target.parentNode.style.left = event.pageX - event.target.offsetWidth / 2 + 'px'
-        event.target.parentNode.style.top = event.pageY - event.target.offsetHeight / 2 + 'px'
-      }
-
-      this.addEventListener('mousemove', onMouseMove)
-
-      /**
-       * Makes element stop moving when mouse button is released.
-       *
-       */
-      this.onmouseup = function () {
-        this.removeEventListener('mousemove', onMouseMove)
-        this.onmouseup = null
+        /**
+         * Updates the current position of the element.
+         *
+         * @param {object} event - Object containing the current position.
+         */
+        function onMouseMove (event) {
+          target.parentNode.style.left = event.pageX - shiftX + 'px'
+          target.parentNode.style.top = event.pageY - shiftY + 'px'
+          target.parentNode.style.zIndex = 900
+          console.log(target)
+        }
+        document.addEventListener('mousemove', onMouseMove)
+        /**
+         * Makes element stop moving when mouse button is released.
+         *
+         */
+        target.onmouseup = function () {
+          document.removeEventListener('mousemove', onMouseMove)
+          target.onmouseup = null
+        }
       }
     }
   }
