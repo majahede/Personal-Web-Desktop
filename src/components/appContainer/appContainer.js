@@ -82,7 +82,6 @@ customElements.define('app-container',
      * Called after the element is inserted into the DOM.
      */
     connectedCallback () {
-    // this.topBar.addEventListener('mousedown', this.onDragStart, false)
       document.addEventListener('mousedown', event => {
         this.onDragStart(event)
       })
@@ -113,6 +112,7 @@ customElements.define('app-container',
     onDragStart (event) {
       console.log(event)
       const target = event.path[0]
+
       if (target.classList.contains('exit')) {
         const topbar = target.parentNode
         topbar.parentNode.remove()
@@ -121,18 +121,20 @@ customElements.define('app-container',
         const shiftX = event.clientX - target.parentNode.getBoundingClientRect().left
         const shiftY = event.clientY - target.parentNode.getBoundingClientRect().top
 
-        target.parentNode.style.zIndex = 1000
-
         /**
          * Updates the current position of the element.
          *
          * @param {object} event - Object containing the current position.
          */
         function onMouseMove (event) {
-          target.parentNode.style.left = event.pageX - shiftX + 'px'
-          target.parentNode.style.top = event.pageY - shiftY + 'px'
-          target.parentNode.style.zIndex = 900
-          console.log(target)
+          if ((event.clientY + 150 > window.innerHeight) || (event.clientX + 100 > window.innerWidth) ||
+          (event.clientY < 0) || (event.clientX - 20 < 0)) {
+            // Stop moving.
+          } else {
+            target.parentNode.style.left = event.pageX - shiftX + 'px'
+            target.parentNode.style.top = event.pageY - shiftY + 'px'
+            target.parentNode.style.zIndex = 900
+          }
         }
         document.addEventListener('mousemove', onMouseMove)
         /**
@@ -142,6 +144,7 @@ customElements.define('app-container',
         target.onmouseup = function () {
           document.removeEventListener('mousemove', onMouseMove)
           target.onmouseup = null
+          target.parentNode.style.zIndex = 5
         }
       }
     }

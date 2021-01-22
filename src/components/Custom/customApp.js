@@ -13,11 +13,14 @@ template.innerHTML = `
 <style> 
 :host {
   background-color:  #ffc420;
+  display: block;
+  width:510px;
 }
 
 .container {
   background-color: #01053f;
   padding: 20px;
+  overflow: hidden;
 }
 
 .title {
