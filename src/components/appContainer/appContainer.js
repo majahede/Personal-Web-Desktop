@@ -11,7 +11,9 @@
 const template = document.createElement('template')
 template.innerHTML = `
 <style> 
-
+:host {
+  position: relative;
+}
 .container {
   background-color: white;
   display: block;
@@ -27,6 +29,7 @@ template.innerHTML = `
   background-color: #f3f3f3;
   position: relative;
   height: 18px;
+  z-index: 6;
 } 
 
 .exit {
@@ -48,7 +51,7 @@ template.innerHTML = `
 
 </style>
 
-<div class="container">
+<div class="container" tabindex ="-1">
     <div class="top-bar">
     <button class ="exit">X</button>
     </div>
@@ -84,8 +87,14 @@ customElements.define('app-container',
     connectedCallback () {
       document.addEventListener('mousedown', event => {
         this.onDragStart(event)
-      })
+      }, false)
       this.appendApp()
+      this.container.addEventListener('focus', (event) => {
+        event.target.style.zIndex = 1000
+      })
+      this.container.addEventListener('blur', (event) => {
+        event.target.style.zIndex = 500
+      })
     }
 
     /**
@@ -112,11 +121,11 @@ customElements.define('app-container',
     onDragStart (event) {
       console.log(event)
       const target = event.path[0]
-
       if (target.classList.contains('exit')) {
         const topbar = target.parentNode
         topbar.parentNode.remove()
       }
+
       if (target === this.topBar) {
         const shiftX = event.clientX - target.parentNode.getBoundingClientRect().left
         const shiftY = event.clientY - target.parentNode.getBoundingClientRect().top
@@ -133,9 +142,9 @@ customElements.define('app-container',
           } else {
             target.parentNode.style.left = event.pageX - shiftX + 'px'
             target.parentNode.style.top = event.pageY - shiftY + 'px'
-            target.parentNode.style.zIndex = 900
           }
         }
+        // target.parentNode.style.zIndex = 1000
         document.addEventListener('mousemove', onMouseMove)
         /**
          * Makes element stop moving when mouse button is released.
@@ -144,7 +153,6 @@ customElements.define('app-container',
         target.onmouseup = function () {
           document.removeEventListener('mousemove', onMouseMove)
           target.onmouseup = null
-          target.parentNode.style.zIndex = 5
         }
       }
     }

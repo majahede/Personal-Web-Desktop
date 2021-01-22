@@ -5,7 +5,7 @@
 
 html, body {
   height: 100%;
-  z-index: 0;
+  
 }
 
 body {
@@ -13,4 +13,6 @@ body {
   margin: 0;
   color:  #2b2b2b;
   overflow: hidden;
+  z-index: 0;
+  
 }

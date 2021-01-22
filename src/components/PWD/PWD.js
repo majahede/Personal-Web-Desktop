@@ -16,7 +16,7 @@ template.innerHTML = `
     display: block;
     width: 100%;
     height: 100%;
-    position: relative;
+    position: absolute;
     overflow: hidden;
     z-index: 1;
   }
