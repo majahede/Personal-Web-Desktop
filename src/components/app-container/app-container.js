@@ -44,12 +44,6 @@ template.innerHTML = `
   font-size: 1.1rem;
   cursor: pointer;
 }
-
-.hold {
-
-}
-
-
 </style>
 
 <div class="container" tabindex ="-1">
@@ -87,9 +81,10 @@ customElements.define('app-container',
      */
     connectedCallback () {
       document.addEventListener('mousedown', event => {
-        this.onDragStart(event)
-      }, false)
+        this._onDragStart(event)
+      })
       this.appendApp()
+
       this.addEventListener('focus', (event) => {
         event.target.style.zIndex = 1000
       })
@@ -119,7 +114,7 @@ customElements.define('app-container',
      *
      * @param {object} event - Object containing the current position.
      */
-    onDragStart (event) {
+    _onDragStart (event) {
       const target = event.path[0]
       if (target.classList.contains('exit')) {
         const topbar = target.parentNode
@@ -144,8 +139,9 @@ customElements.define('app-container',
             target.parentNode.style.top = event.pageY - shiftY + 'px'
           }
         }
-        target.parentNode.style.zIndex = 1000
+
         document.addEventListener('mousemove', onMouseMove)
+
         /**
          * Makes element stop moving when mouse button is released.
          *
