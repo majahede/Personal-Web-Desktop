@@ -58,7 +58,7 @@ p {
   margin-top: 10px;
 }
 
-.set-username {
+.set-username, .change-username {
   background-color: #fff;
   color: #440f88;
   border-radius: 10px;
@@ -70,6 +70,7 @@ p {
 <form autocomplete="off" class="username-form">
 <input id="username" placeholder="Enter username"/>
 <input type="button" class="set-username" value="Save"/>
+<input type="button" class="change-username" value="Change name" hidden="true"/>
 </form>
 <div class="chat-output"> 
 </div>
@@ -98,21 +99,33 @@ customElements.define('messages-app',
       // append the template to the shadow root.
       this.attachShadow({ mode: 'open' })
       this.shadowRoot.appendChild(template.content.cloneNode(true))
-      this.message = this.shadowRoot.querySelector('#message')
-      this.send = this.shadowRoot.querySelector('.send-message')
-      this.username = this.shadowRoot.querySelector('#username')
-      this.usernameButton = this.shadowRoot.querySelector('.set-username')
-      this.chat = this.shadowRoot.querySelector('.chat-output')
-      this.websocket = new WebSocket('wss://cscloud6-127.lnu.se/socket/')
+      this._message = this.shadowRoot.querySelector('#message')
+      this._send = this.shadowRoot.querySelector('.send-message')
+      this._usernameInput = this.shadowRoot.querySelector('#username')
+      this._usernameButton = this.shadowRoot.querySelector('.set-username')
+      this._changeButton = this.shadowRoot.querySelector('.change-username')
+      this._chat = this.shadowRoot.querySelector('.chat-output')
+      this._websocket = new WebSocket('wss://cscloud6-127.lnu.se/socket/')
+      this._changeFormInputs = this._changeFormInputs.bind(this)
     }
 
     /**
      * Called after the element is inserted into the DOM.
      */
     connectedCallback () {
-      this.usernameButton.addEventListener('click', () => {
-        window.localStorage.setItem('username', JSON.stringify(this.username.value))
-        this.username.value = ''
+      const username = JSON.parse(window.localStorage.getItem('messageUsername'))
+
+      if (username !== '') {
+        this._usernameInput.setAttribute('hidden', '')
+        this._usernameButton.setAttribute('hidden', '')
+        this._changeButton.removeAttribute('hidden')
+      }
+
+      this._changeButton.addEventListener('click', this._changeFormInputs)
+      this._usernameButton.addEventListener('click', event => {
+        window.localStorage.setItem('messageUsername', JSON.stringify(this._usernameInput.value))
+        this._usernameInput.value = ''
+        this._changeFormInputs(event)
       })
 
       /**
@@ -120,28 +133,28 @@ customElements.define('messages-app',
        *
        * @param {object} event - MessageEvent from server
        */
-      this.websocket.onmessage = (event) => {
+      this._websocket.onmessage = (event) => {
         const data = JSON.parse(event.data)
-        this.showMessage(`${data.username}: ${data.data}`)
+        this._showMessage(`${data.username}: ${data.data}`)
       }
 
-      this.send.addEventListener('click', () => {
-        this.sendMessage()
-        this.message.value = ''
+      this._send.addEventListener('click', () => {
+        this._sendMessage()
       })
     }
 
     /**
      * Send message to server.
      */
-    sendMessage () {
+    _sendMessage () {
       const data = {
         type: 'message',
-        data: this.message.value,
-        username: JSON.parse(window.localStorage.getItem('username')),
+        data: this._message.value,
+        username: JSON.parse(window.localStorage.getItem('messageUsername')),
         key: 'eDBE76deU7L0H9mEBgxUKVR0VCnq0XBd'
       }
-      this.websocket.send(JSON.stringify(data))
+      this._websocket.send(JSON.stringify(data))
+      this._message.value = ''
     }
 
     /**
@@ -149,10 +162,28 @@ customElements.define('messages-app',
      *
      * @param {string} input - The message to be shown in chat window.
      */
-    showMessage (input) {
+    _showMessage (input) {
       const newMessage = document.createElement('p')
       newMessage.textContent = input
-      this.chat.appendChild(newMessage)
+      this._chat.appendChild(newMessage)
+    }
+
+    /**
+     * Changes the form depending on if the user has set a valid username.
+     *
+     * @param {object} event - An object containing the event.
+     */
+    _changeFormInputs (event) {
+      const username = JSON.parse(window.localStorage.getItem('messageUsername'))
+      if (username === '' || event.target.classList.contains('change-username')) {
+        this._changeButton.setAttribute('hidden', '')
+        this._usernameInput.removeAttribute('hidden', '')
+        this._usernameButton.removeAttribute('hidden', '')
+      } else {
+        this._usernameInput.setAttribute('hidden', '')
+        this._usernameButton.setAttribute('hidden', '')
+        this._changeButton.removeAttribute('hidden')
+      }
     }
   }
 )

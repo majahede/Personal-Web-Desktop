@@ -94,22 +94,19 @@ customElements.define('personal-web-desktop',
       // append the template to the shadow root.
       this.attachShadow({ mode: 'open' })
       this.shadowRoot.appendChild(template.content.cloneNode(true))
-      this.messagesApp = this.shadowRoot.querySelector('#messages')
-      this.memoryApp = this.shadowRoot.querySelector('#memory')
-      this.currencyApp = this.shadowRoot.querySelector('#currency')
-      this.main = this.shadowRoot.querySelector('.main')
+      this._messagesApp = this.shadowRoot.querySelector('#messages')
+      this._memoryApp = this.shadowRoot.querySelector('#memory')
+      this._currencyApp = this.shadowRoot.querySelector('#currency')
+      this._main = this.shadowRoot.querySelector('.main')
     }
 
     /**
      * Called after the element is inserted into the DOM.
      */
     connectedCallback () {
-      this.messagesApp.addEventListener('click', () => this.openApp('messages'))
-      this.memoryApp.addEventListener('click', () => this.openApp('memory'))
-      this.currencyApp.addEventListener('click', () => this.openApp('currency'))
-      const applikation = document.createElement('app-container')
-      applikation.class = 'messages'
-      this.main.appendChild(applikation)
+      this._messagesApp.addEventListener('click', () => this._openApp('messages'))
+      this._memoryApp.addEventListener('click', () => this._openApp('memory'))
+      this._currencyApp.addEventListener('click', () => this._openApp('currency'))
     }
 
     /**
@@ -117,10 +114,10 @@ customElements.define('personal-web-desktop',
      *
      * @param {string} app - The class of the element to open.
      */
-    openApp (app) {
+    _openApp (app) {
       const application = document.createElement('app-container')
       application.class = app
-      this.main.appendChild(application)
+      this._main.appendChild(application)
     }
   }
 )
