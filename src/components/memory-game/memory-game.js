@@ -14,6 +14,7 @@ template.innerHTML = `
 :host {
   display: block;
   background-color: #fff;
+  min-width: 300px;
 }
 
 :host([dark]) {

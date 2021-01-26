@@ -50,7 +50,7 @@ button {
 }
 
 
-#custom {
+#currency {
   color: #ffc420;
   background-color: #01053f;
 }
@@ -60,7 +60,7 @@ button {
   background-color: #ff9924;
 }
 
-#chat {
+#messages {
   background-color:  #440f88;
   font-size: 20px;
   margin-bottom: 20px;
@@ -70,9 +70,9 @@ button {
 <div class = "main">
 </div>
 <div class="footer">
-  <button id="chat">💬</button>
+  <button id="messages">💬</button>
   <button id="memory">?</button>
-  <button id="custom">€</button>
+  <button id="currency">€</button>
 </div>
 
 
@@ -94,9 +94,9 @@ customElements.define('personal-web-desktop',
       // append the template to the shadow root.
       this.attachShadow({ mode: 'open' })
       this.shadowRoot.appendChild(template.content.cloneNode(true))
-      this.chatApp = this.shadowRoot.querySelector('#chat')
+      this.messagesApp = this.shadowRoot.querySelector('#messages')
       this.memoryApp = this.shadowRoot.querySelector('#memory')
-      this.customApp = this.shadowRoot.querySelector('#custom')
+      this.currencyApp = this.shadowRoot.querySelector('#currency')
       this.main = this.shadowRoot.querySelector('.main')
     }
 
@@ -104,11 +104,11 @@ customElements.define('personal-web-desktop',
      * Called after the element is inserted into the DOM.
      */
     connectedCallback () {
-      this.chatApp.addEventListener('click', () => this.openApp('chat'))
+      this.messagesApp.addEventListener('click', () => this.openApp('messages'))
       this.memoryApp.addEventListener('click', () => this.openApp('memory'))
-      this.customApp.addEventListener('click', () => this.openApp('custom'))
+      this.currencyApp.addEventListener('click', () => this.openApp('currency'))
       const applikation = document.createElement('app-container')
-      applikation.class = 'chat'
+      applikation.class = 'messages'
       this.main.appendChild(applikation)
     }
 

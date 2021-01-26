@@ -22,6 +22,7 @@ template.innerHTML = `
   border-radius: 5px;
   position: absolute;
   z-index: 5;
+  outline: none;
 }
 
 .top-bar {
@@ -89,10 +90,10 @@ customElements.define('app-container',
         this.onDragStart(event)
       }, false)
       this.appendApp()
-      this.container.addEventListener('focus', (event) => {
+      this.addEventListener('focus', (event) => {
         event.target.style.zIndex = 1000
       })
-      this.container.addEventListener('blur', (event) => {
+      this.addEventListener('blur', (event) => {
         event.target.style.zIndex = 500
       })
     }
@@ -101,14 +102,14 @@ customElements.define('app-container',
      * Appends the correct application to the container depending on class.
      */
     appendApp () {
-      if (this.class === 'chat') {
+      if (this.class === 'messages') {
         const chat = document.createElement('messages-app')
         this.main.appendChild(chat)
       } else if (this.class === 'memory') {
         const memory = document.createElement('memory-game')
         this.main.appendChild(memory)
-      } else if (this.class === 'custom') {
-        const custom = document.createElement('custom-app')
+      } else if (this.class === 'currency') {
+        const custom = document.createElement('currency-converter')
         this.main.appendChild(custom)
       }
     }
@@ -119,7 +120,6 @@ customElements.define('app-container',
      * @param {object} event - Object containing the current position.
      */
     onDragStart (event) {
-      console.log(event)
       const target = event.path[0]
       if (target.classList.contains('exit')) {
         const topbar = target.parentNode
@@ -144,7 +144,7 @@ customElements.define('app-container',
             target.parentNode.style.top = event.pageY - shiftY + 'px'
           }
         }
-        // target.parentNode.style.zIndex = 1000
+        target.parentNode.style.zIndex = 1000
         document.addEventListener('mousemove', onMouseMove)
         /**
          * Makes element stop moving when mouse button is released.

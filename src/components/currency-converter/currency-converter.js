@@ -73,7 +73,7 @@ h3 {
 }
 
 </style>
-<div class="container">
+<div class="container" tabindex ="-1">
   <div class="title">
     <h2>Currency Converter</h2>
   </div>
@@ -99,7 +99,7 @@ h3 {
 /**
  * Define custom element.
  */
-customElements.define('custom-app',
+customElements.define('currency-converter',
   /**
    * @class
    */
@@ -118,6 +118,7 @@ customElements.define('custom-app',
       this.amount = this.shadowRoot.querySelector('#amount')
       this.convert = this.shadowRoot.querySelector('#convert')
       this.result = this.shadowRoot.querySelector('.result')
+      this.container = this.shadowRoot.querySelector('.container')
     }
 
     /**
