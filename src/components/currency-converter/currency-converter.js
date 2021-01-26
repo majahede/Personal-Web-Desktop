@@ -113,22 +113,21 @@ customElements.define('currency-converter',
       // append the template to the shadow root.
       this.attachShadow({ mode: 'open' })
       this.shadowRoot.appendChild(template.content.cloneNode(true))
-      this.fromCurrency = this.shadowRoot.querySelector('#from-currency')
-      this.toCurrency = this.shadowRoot.querySelector('#to-currency')
-      this.amount = this.shadowRoot.querySelector('#amount')
-      this.convert = this.shadowRoot.querySelector('#convert')
-      this.result = this.shadowRoot.querySelector('.result')
-      this.container = this.shadowRoot.querySelector('.container')
+      this._fromCurrency = this.shadowRoot.querySelector('#from-currency')
+      this._toCurrency = this.shadowRoot.querySelector('#to-currency')
+      this._amount = this.shadowRoot.querySelector('#amount')
+      this._convert = this.shadowRoot.querySelector('#convert')
+      this._result = this.shadowRoot.querySelector('.result')
+      this._container = this.shadowRoot.querySelector('.container')
     }
 
     /**
      * Called after the element is inserted into the DOM.
      */
     connectedCallback () {
-      this.addCurrency()
-      this.convert.addEventListener('click', event => {
-        event.preventDefault()
-        this.convertCurrency()
+      this._addCurrency()
+      this._convert.addEventListener('click', event => {
+        this._convertCurrency()
       })
     }
 
@@ -137,7 +136,7 @@ customElements.define('currency-converter',
      *
      * @returns {object} - the currency rates.
      */
-    async getCurrency () {
+    async _getCurrency () {
       const URL = 'https://api.exchangeratesapi.io/latest'
       const getCurrency = await window.fetch(URL)
       const currency = await getCurrency.json()
@@ -148,8 +147,8 @@ customElements.define('currency-converter',
     /**
      * Adds currency options.
      */
-    async addCurrency () {
-      const currency = await this.getCurrency()
+    async _addCurrency () {
+      const currency = await this._getCurrency()
       const sortedCurrency = Object.keys(currency).sort().reduce(
         (obj, key) => {
           obj[key] = currency[key]
@@ -162,8 +161,8 @@ customElements.define('currency-converter',
         option.value = key
         option.textContent = key
         const clone = option.cloneNode(true)
-        this.fromCurrency.appendChild(option)
-        this.toCurrency.appendChild(clone)
+        this._fromCurrency.appendChild(option)
+        this._toCurrency.appendChild(clone)
       }
     }
 
@@ -172,22 +171,22 @@ customElements.define('currency-converter',
      *
      * @returns {number} - the converted currency.
      */
-    async convertCurrency () {
-      const currency = await this.getCurrency()
+    async _convertCurrency () {
+      const currency = await this._getCurrency()
       let firstCurrency = 0
       let secondCurrency = 0
-      const amount = this.amount.value
+      const amount = this._amount.value
 
       for (const key in currency) {
-        if (key === this.fromCurrency.value) {
+        if (key === this._fromCurrency.value) {
           firstCurrency = currency[key]
         }
-        if (key === this.toCurrency.value) {
+        if (key === this._toCurrency.value) {
           secondCurrency = currency[key]
         }
       }
       const result = (currency.EUR / firstCurrency) * secondCurrency * amount
-      this.result.textContent = ` ${this.amount.value} ${this.fromCurrency.value} =  ${result.toFixed(2)} ${this.toCurrency.value}`
+      this._result.textContent = ` ${this._amount.value} ${this._fromCurrency.value} =  ${result.toFixed(2)} ${this._toCurrency.value}`
     }
   }
 )

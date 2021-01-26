@@ -70,10 +70,9 @@ customElements.define('app-container',
       // append the template to the shadow root.
       this.attachShadow({ mode: 'open' })
       this.shadowRoot.appendChild(template.content.cloneNode(true))
-      this.container = this.shadowRoot.querySelector('.container')
-      this.topBar = this.shadowRoot.querySelector('.top-bar')
-      this.exitButton = this.shadowRoot.querySelector('.exit')
-      this.main = this.shadowRoot.querySelector('.main')
+
+      this._topBar = this.shadowRoot.querySelector('.top-bar')
+      this._main = this.shadowRoot.querySelector('.main')
     }
 
     /**
@@ -99,13 +98,13 @@ customElements.define('app-container',
     appendApp () {
       if (this.class === 'messages') {
         const chat = document.createElement('messages-app')
-        this.main.appendChild(chat)
+        this._main.appendChild(chat)
       } else if (this.class === 'memory') {
         const memory = document.createElement('memory-game')
-        this.main.appendChild(memory)
+        this._main.appendChild(memory)
       } else if (this.class === 'currency') {
         const custom = document.createElement('currency-converter')
-        this.main.appendChild(custom)
+        this._main.appendChild(custom)
       }
     }
 
@@ -121,7 +120,7 @@ customElements.define('app-container',
         topbar.parentNode.remove()
       }
 
-      if (target === this.topBar) {
+      if (target === this._topBar) {
         const shiftX = event.clientX - target.parentNode.getBoundingClientRect().left
         const shiftY = event.clientY - target.parentNode.getBoundingClientRect().top
 

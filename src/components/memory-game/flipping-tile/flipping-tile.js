@@ -121,7 +121,7 @@ customElements.define('flipping-tile',
      */
     connectedCallback () {
       this.addEventListener('dragstart', (event) => event.preventDefault())
-      this._tile.addEventListener('click', () => this.flipTile())
+      this._tile.addEventListener('click', () => this._flipTile())
     }
 
     /**
@@ -158,7 +158,7 @@ customElements.define('flipping-tile',
     /**
      * Flips card.
      */
-    flipTile () {
+    _flipTile () {
       if (this.hasAttribute('flipped')) {
         this.removeAttribute('flipped')
       } else {

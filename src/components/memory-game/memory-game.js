@@ -134,44 +134,44 @@ customElements.define('memory-game',
       this.attachShadow({ mode: 'open' })
       this.shadowRoot.appendChild(template.content.cloneNode(true))
 
-      this.grid = this.shadowRoot.querySelector('.grid')
-      this.small = this.shadowRoot.querySelector('#small')
-      this.medium = this.shadowRoot.querySelector('#medium')
-      this.large = this.shadowRoot.querySelector('#large')
-      this.onTileFlip = this.onTileFlip.bind(this)
-      this.attempts = 0
-      this.switch = this.shadowRoot.querySelector('#switch')
-      this.gameover = this.shadowRoot.querySelector('#gameover')
+      this._grid = this.shadowRoot.querySelector('.grid')
+      this._small = this.shadowRoot.querySelector('#small')
+      this._medium = this.shadowRoot.querySelector('#medium')
+      this._large = this.shadowRoot.querySelector('#large')
+      this._onTileFlip = this._onTileFlip.bind(this)
+      this._attempts = 0
+      this._switch = this.shadowRoot.querySelector('#switch')
+      this._gameover = this.shadowRoot.querySelector('#gameover')
     }
 
     /**
      * Called after the element is inserted into the DOM.
      */
     connectedCallback () {
-      this.setBoardSize('large')
-      this.addTiles(16)
-      this.switch.addEventListener('change', () => {
-        if (this.switch.checked) {
+      this._setBoardSize('large')
+      this._addTiles(16)
+      this._switch.addEventListener('change', () => {
+        if (this._switch.checked) {
           this.setAttribute('dark', '')
         } else {
           this.removeAttribute('dark', '')
         }
       })
 
-      this.small.addEventListener('click', () => {
-        this.setBoardSize('small')
-        this.addTiles(4)
+      this._small.addEventListener('click', () => {
+        this._setBoardSize('small')
+        this._addTiles(4)
       })
-      this.medium.addEventListener('click', () => {
-        this.setBoardSize('medium')
-        this.addTiles(8)
+      this._medium.addEventListener('click', () => {
+        this._setBoardSize('medium')
+        this._addTiles(8)
       })
-      this.large.addEventListener('click', () => {
-        this.setBoardSize('large')
-        this.addTiles(16)
+      this._large.addEventListener('click', () => {
+        this._setBoardSize('large')
+        this._addTiles(16)
       })
 
-      this.grid.addEventListener('fliptile', this.onTileFlip)
+      this._grid.addEventListener('fliptile', this._onTileFlip)
     }
 
     /**
@@ -180,7 +180,7 @@ customElements.define('memory-game',
      * @returns {object} An object containing grouped tiles.
      */
     get _tiles () {
-      const tiles = Array.from(this.grid.children)
+      const tiles = Array.from(this._grid.children)
       return {
         all: tiles,
         faceUp: tiles.filter(tile => tile.hasAttribute('flipped') && !tile.hasAttribute('hidden')),
@@ -193,10 +193,10 @@ customElements.define('memory-game',
      *
      * @param {string} boardSize - Type of game board.
      */
-    setBoardSize (boardSize) {
-      this.grid.setAttribute('id', boardSize)
-      while (this.grid.firstElementChild) {
-        this.grid.firstElementChild.remove()
+    _setBoardSize (boardSize) {
+      this._grid.setAttribute('id', boardSize)
+      while (this._grid.firstElementChild) {
+        this._grid.firstElementChild.remove()
       }
     }
 
@@ -205,17 +205,17 @@ customElements.define('memory-game',
      *
      * @param {number} boardSize - Number of tiles on the game board.
      */
-    addTiles (boardSize) {
-      while (this.gameover.firstElementChild) {
-        this.gameover.firstElementChild.remove()
+    _addTiles (boardSize) {
+      while (this._gameover.firstElementChild) {
+        this._gameover.firstElementChild.remove()
       }
-      const images = this.createImageArray(`${boardSize / 2}`)
-      const shuffledImages = this.shuffle(images)
+      const images = this._createImageArray(`${boardSize / 2}`)
+      const shuffledImages = this._shuffle(images)
       for (let i = 0; i < boardSize; i++) {
         const tile = document.createElement('flipping-tile')
-        this.grid.appendChild(tile)
+        this._grid.appendChild(tile)
         tile.setAttribute('src', shuffledImages[i])
-        this.attempts = 0
+        this._attempts = 0
       }
     }
 
@@ -225,7 +225,7 @@ customElements.define('memory-game',
      * @param {number} boardSize - The size of the gamee board.
      * @returns {Array} The array of images.
      */
-    createImageArray (boardSize) {
+    _createImageArray (boardSize) {
       const arrayOfImages = []
       for (let i = 1; i <= boardSize; i++) {
         const image = `./images/${i}.png`
@@ -241,7 +241,7 @@ customElements.define('memory-game',
      * @param {Array} images - The array of images to shuffle.
      * @returns {Array} The shuffled array.
      */
-    shuffle (images) {
+    _shuffle (images) {
       let i = images.length
       let j
       let x
@@ -262,7 +262,7 @@ customElements.define('memory-game',
      *
      * @param {CustomEvent} event - The custom event.
      */
-    onTileFlip (event) {
+    _onTileFlip (event) {
       const tiles = this._tiles
       const first = tiles.faceUp[0]
       const second = tiles.faceUp[1]
@@ -275,20 +275,20 @@ customElements.define('memory-game',
           // It's a match.
             first.setAttribute('hidden', '')
             second.setAttribute('hidden', '')
-            this.attempts += 1
+            this._attempts += 1
           } else {
             first.removeAttribute('flipped')
             second.removeAttribute('flipped')
-            this.attempts += 1
+            this._attempts += 1
           }
           tiles.all.forEach(tile => (tile.removeAttribute('disabled')))
           if (tiles.all.length === (tiles.hidden.length + 2)) {
-            while (this.grid.firstElementChild) {
-              this.grid.removeChild(this.grid.firstElementChild)
+            while (this._grid.firstElementChild) {
+              this._grid.removeChild(this._grid.firstElementChild)
             }
             const output = document.createElement('h2')
-            output.textContent = `You made it in ${this.attempts} attempts! Try again?`
-            this.gameover.appendChild(output)
+            output.textContent = `You made it in ${this._attempts} attempts! Try again?`
+            this._gameover.appendChild(output)
           }
         }, 1200)
       }
