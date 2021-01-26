@@ -110,6 +110,15 @@ customElements.define('personal-web-desktop',
     }
 
     /**
+     * Called after the element has been removed from the DOM.
+     */
+    disconnectedCallback () {
+      this._messagesApp.removeEventListener('click', () => this._openApp('messages'))
+      this._memoryApp.removeEventListener('click', () => this._openApp('memory'))
+      this._currencyApp.removeEventListener('click', () => this._openApp('currency'))
+    }
+
+    /**
      * Adds a new app container and sets a class attribute.
      *
      * @param {string} app - The class of the element to open.
