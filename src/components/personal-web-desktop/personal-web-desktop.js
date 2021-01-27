@@ -98,34 +98,35 @@ customElements.define('personal-web-desktop',
       this._memoryApp = this.shadowRoot.querySelector('#memory')
       this._currencyApp = this.shadowRoot.querySelector('#currency')
       this._main = this.shadowRoot.querySelector('.main')
+      this._openApp = this._openApp.bind(this)
     }
 
     /**
      * Called after the element is inserted into the DOM.
      */
     connectedCallback () {
-      this._messagesApp.addEventListener('click', () => this._openApp('messages'))
-      this._memoryApp.addEventListener('click', () => this._openApp('memory'))
-      this._currencyApp.addEventListener('click', () => this._openApp('currency'))
+      this._messagesApp.addEventListener('click', this._openApp)
+      this._memoryApp.addEventListener('click', this._openApp)
+      this._currencyApp.addEventListener('click', this._openApp)
     }
 
     /**
      * Called after the element has been removed from the DOM.
      */
     disconnectedCallback () {
-      this._messagesApp.removeEventListener('click', () => this._openApp('messages'))
-      this._memoryApp.removeEventListener('click', () => this._openApp('memory'))
-      this._currencyApp.removeEventListener('click', () => this._openApp('currency'))
+      this._messagesApp.removeEventListener('click', this._openApp)
+      this._memoryApp.removeEventListener('click', this._openApp)
+      this._currencyApp.removeEventListener('click', this._openApp)
     }
 
     /**
      * Adds a new app container and sets a class attribute.
      *
-     * @param {string} app - The class of the element to open.
+     * @param {MouseEvent} event - The mouse event.
      */
-    _openApp (app) {
+    _openApp (event) {
       const application = document.createElement('app-container')
-      application.class = app
+      application.class = event.target.id
       this._main.appendChild(application)
     }
   }

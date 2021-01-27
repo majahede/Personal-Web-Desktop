@@ -112,7 +112,7 @@ h2 {
 <div>
 <div id="gameover">
 </div>
-<div class="grid"> 
+<div class="grid" id="large"> 
 </div>
 
 `
@@ -143,19 +143,20 @@ customElements.define('memory-game',
       this._switch = this.shadowRoot.querySelector('#switch')
       this._gameover = this.shadowRoot.querySelector('#gameover')
       this._switchMode = this._switchMode.bind(this)
+      this._setBoardSize = this._setBoardSize.bind(this)
     }
 
     /**
      * Called after the element is inserted into the DOM.
      */
     connectedCallback () {
-      this._setBoardSize('large')
+      this._addTiles(16)
 
       this._switch.addEventListener('change', this._switchMode)
 
-      this._small.addEventListener('click', () => this._setBoardSize('small'))
-      this._medium.addEventListener('click', () => this._setBoardSize('medium'))
-      this._large.addEventListener('click', () => this._setBoardSize('large'))
+      this._small.addEventListener('click', this._setBoardSize)
+      this._medium.addEventListener('click', this._setBoardSize)
+      this._large.addEventListener('click', this._setBoardSize)
 
       this._grid.addEventListener('fliptile', this._onTileFlip)
     }
@@ -165,20 +166,20 @@ customElements.define('memory-game',
      */
     disconnectedCallback () {
       this._switch.removeEventListener('change', this._switchMode)
-      this._small.removeEventListener('click', () => this._setBoardSize('small'))
-      this._medium.removeEventListener('click', () => this._setBoardSize('medium'))
-      this._large.removeEventListener('click', () => this._setBoardSize('large'))
+      this._small.removeEventListener('click', this._setBoardSize)
+      this._medium.removeEventListener('click', this._setBoardSize)
+      this._large.removeEventListener('click', this._setBoardSize)
       this._grid.removeEventListener('fliptile', this._onTileFlip)
     }
 
     /**
      * Called after the element is removed from the DOM.
      *
-     * @param {object} event - Object containing event details.
+     * @param {Event} event - The event.
      */
     _switchMode (event) {
+      console.log(event)
       if (event.target.checked) {
-        console.log(event)
         this.setAttribute('dark', '')
       } else {
         this.removeAttribute('dark', '')
@@ -202,10 +203,10 @@ customElements.define('memory-game',
     /**
      * Sets the size of the board.
      *
-     * @param {string} boardSize - Type of game board.
+     * @param {MouseEvent} event - The mouse event.
      */
-    _setBoardSize (boardSize) {
-      this._grid.setAttribute('id', boardSize)
+    _setBoardSize (event) {
+      this._grid.setAttribute('id', event.target.getAttribute('id'))
       while (this._grid.firstElementChild) {
         this._grid.firstElementChild.remove()
       }
@@ -245,8 +246,9 @@ customElements.define('memory-game',
      */
     _createImageArray (boardSize) {
       const arrayOfImages = []
+      const pathToModule = import.meta.url
       for (let i = 1; i <= boardSize; i++) {
-        const image = `./images/${i}.png`
+        const image = new URL(`./images/${i}.png`, pathToModule)
         arrayOfImages.push(image)
         arrayOfImages.push(image)
       }

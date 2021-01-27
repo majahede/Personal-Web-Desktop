@@ -107,6 +107,8 @@ customElements.define('messages-app',
       this._chat = this.shadowRoot.querySelector('.chat-output')
       this._websocket = new WebSocket('wss://cscloud6-127.lnu.se/socket/')
       this._changeFormInputs = this._changeFormInputs.bind(this)
+      this._setUsername = this._setUsername.bind(this)
+      this._sendMessage = this._sendMessage.bind(this)
     }
 
     /**
@@ -122,13 +124,13 @@ customElements.define('messages-app',
       }
 
       this._changeButton.addEventListener('click', this._changeFormInputs)
-      this._usernameButton.addEventListener('click', event => this._setUsername(event))
-      this._send.addEventListener('click', () => this._sendMessage())
+      this._usernameButton.addEventListener('click', this._setUsername)
+      this._send.addEventListener('click', this._sendMessage)
 
       /**
        * Gets message from server.
        *
-       * @param {object} event - MessageEvent from server
+       * @param {object} event - MessageEvent from server.
        */
       this._websocket.onmessage = (event) => {
         const data = JSON.parse(event.data)
@@ -141,14 +143,14 @@ customElements.define('messages-app',
      */
     disconnectedCallback () {
       this._changeButton.removeEventListener('click', this._changeFormInputs)
-      this._usernameButton.removeEventListener('click', event => this._setUsername(event))
-      this._send.removeEventListener('click', () => this._sendMessage())
+      this._usernameButton.removeEventListener('click', this._setUsername)
+      this._send.removeEventListener('click', this._sendMessage)
     }
 
     /**
      * Sets the username from user input.
      *
-     * @param {object} event - An object containing the event.
+     * @param {MouseEvent} event - The mouse event.
      */
     _setUsername (event) {
       window.localStorage.setItem('messageUsername', JSON.stringify(this._usernameInput.value))
@@ -158,8 +160,10 @@ customElements.define('messages-app',
 
     /**
      * Send message to server.
+     *
+     * @param {MouseEvent} event - The mouse event.
      */
-    _sendMessage () {
+    _sendMessage (event) {
       const data = {
         type: 'message',
         data: this._message.value,
@@ -184,7 +188,7 @@ customElements.define('messages-app',
     /**
      * Changes the form depending on if the user has set a valid username.
      *
-     * @param {object} event - An object containing the event.
+     * @param {MouseEvent} event - The mouse event.
      */
     _changeFormInputs (event) {
       const username = JSON.parse(window.localStorage.getItem('messageUsername'))

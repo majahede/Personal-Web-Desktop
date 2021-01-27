@@ -5,6 +5,8 @@
  * @version 1.0.0
  */
 
+const IMG_URL = (new URL('images/0.png', import.meta.url))
+
 /**
  * Define template.
  */
@@ -76,7 +78,7 @@ img {
   </style>
 <button class="tile">
   <div id="main-tile">
-    <img part="back-tile" class="back" src="./images/0.png"/>
+    <img part="back-tile" class="back" src="${IMG_URL}"/>
     <img part="front-tile" class="front"/>
   </div>
 </button>
@@ -146,14 +148,6 @@ customElements.define('flipping-tile',
           this._tile.setAttribute('disabled', newValue)
         }
       }
-    }
-
-    /**
-     * Called after the element is removed from the DOM.
-     */
-    disconnectedCallback () {
-      this.removeEventListener('dragstart', (event) => event.preventDefault())
-      this._tile.removeEventListener('click', () => this._flipTile())
     }
 
     /**

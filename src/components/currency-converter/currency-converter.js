@@ -119,6 +119,7 @@ customElements.define('currency-converter',
       this._convert = this.shadowRoot.querySelector('#convert')
       this._result = this.shadowRoot.querySelector('.result')
       this._container = this.shadowRoot.querySelector('.container')
+      this._convertCurrency = this._convertCurrency.bind(this)
     }
 
     /**
@@ -126,14 +127,14 @@ customElements.define('currency-converter',
      */
     connectedCallback () {
       this._addCurrency()
-      this._convert.addEventListener('click', () => this._convertCurrency())
+      this._convert.addEventListener('click', this._convertCurrency)
     }
 
     /**
      * Called after the element is removed from the DOM.
      */
     disconnectedCallback () {
-      this._convert.removeEventListener('click', () => this._convertCurrency())
+      this._convert.removeEventListener('click', this._convertCurrency)
     }
 
     /**
@@ -174,9 +175,10 @@ customElements.define('currency-converter',
     /**
      * Converts one currenecy to another.
      *
+     * @param {MouseEvent} event - The mouse event
      * @returns {number} - the converted currency.
      */
-    async _convertCurrency () {
+    async _convertCurrency (event) {
       const currency = await this._getCurrency()
       let firstCurrency = 0
       let secondCurrency = 0
