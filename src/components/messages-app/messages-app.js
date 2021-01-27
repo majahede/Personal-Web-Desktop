@@ -122,11 +122,8 @@ customElements.define('messages-app',
       }
 
       this._changeButton.addEventListener('click', this._changeFormInputs)
-      this._usernameButton.addEventListener('click', event => {
-        window.localStorage.setItem('messageUsername', JSON.stringify(this._usernameInput.value))
-        this._usernameInput.value = ''
-        this._changeFormInputs(event)
-      })
+      this._usernameButton.addEventListener('click', event => this._setUsername(event))
+      this._send.addEventListener('click', () => this._sendMessage())
 
       /**
        * Gets message from server.
@@ -137,10 +134,26 @@ customElements.define('messages-app',
         const data = JSON.parse(event.data)
         this._showMessage(`${data.username}: ${data.data}`)
       }
+    }
 
-      this._send.addEventListener('click', () => {
-        this._sendMessage()
-      })
+    /**
+     * Called after the element is removed from the DOM.
+     */
+    disconnectedCallback () {
+      this._changeButton.removeEventListener('click', this._changeFormInputs)
+      this._usernameButton.removeEventListener('click', event => this._setUsername(event))
+      this._send.removeEventListener('click', () => this._sendMessage())
+    }
+
+    /**
+     * Sets the username from user input.
+     *
+     * @param {object} event - An object containing the event.
+     */
+    _setUsername (event) {
+      window.localStorage.setItem('messageUsername', JSON.stringify(this._usernameInput.value))
+      this._usernameInput.value = ''
+      this._changeFormInputs(event)
     }
 
     /**

@@ -149,10 +149,11 @@ customElements.define('flipping-tile',
     }
 
     /**
-     * Called after the element has been removed from the DOM.
+     * Called after the element is removed from the DOM.
      */
     disconnectedCallback () {
-
+      this.removeEventListener('dragstart', (event) => event.preventDefault())
+      this._tile.removeEventListener('click', () => this._flipTile())
     }
 
     /**

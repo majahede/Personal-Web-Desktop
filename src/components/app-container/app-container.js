@@ -79,9 +79,7 @@ customElements.define('app-container',
      * Called after the element is inserted into the DOM.
      */
     connectedCallback () {
-      document.addEventListener('mousedown', event => {
-        this._onDragStart(event)
-      })
+      document.addEventListener('mousedown', event => this._onDragStart(event))
       this.appendApp()
 
       this.addEventListener('focus', (event) => {
@@ -121,6 +119,7 @@ customElements.define('app-container',
       }
 
       if (target === this._topBar) {
+        // The distance from the pointer to the left-upper corner of the element.
         const shiftX = event.clientX - target.parentNode.getBoundingClientRect().left
         const shiftY = event.clientY - target.parentNode.getBoundingClientRect().top
 
@@ -134,6 +133,7 @@ customElements.define('app-container',
           (event.clientY < 0) || (event.clientX - 20 < 0)) {
             // Stop moving.
           } else {
+            // move the element at (pageX, pageY) coordinates
             target.parentNode.style.left = event.pageX - shiftX + 'px'
             target.parentNode.style.top = event.pageY - shiftY + 'px'
           }

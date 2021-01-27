@@ -142,6 +142,7 @@ customElements.define('memory-game',
       this._attempts = 0
       this._switch = this.shadowRoot.querySelector('#switch')
       this._gameover = this.shadowRoot.querySelector('#gameover')
+      this._switchMode = this._switchMode.bind(this)
     }
 
     /**
@@ -149,29 +150,39 @@ customElements.define('memory-game',
      */
     connectedCallback () {
       this._setBoardSize('large')
-      this._addTiles(16)
-      this._switch.addEventListener('change', () => {
-        if (this._switch.checked) {
-          this.setAttribute('dark', '')
-        } else {
-          this.removeAttribute('dark', '')
-        }
-      })
 
-      this._small.addEventListener('click', () => {
-        this._setBoardSize('small')
-        this._addTiles(4)
-      })
-      this._medium.addEventListener('click', () => {
-        this._setBoardSize('medium')
-        this._addTiles(8)
-      })
-      this._large.addEventListener('click', () => {
-        this._setBoardSize('large')
-        this._addTiles(16)
-      })
+      this._switch.addEventListener('change', this._switchMode)
+
+      this._small.addEventListener('click', () => this._setBoardSize('small'))
+      this._medium.addEventListener('click', () => this._setBoardSize('medium'))
+      this._large.addEventListener('click', () => this._setBoardSize('large'))
 
       this._grid.addEventListener('fliptile', this._onTileFlip)
+    }
+
+    /**
+     * Called after the element is removed from the DOM.
+     */
+    disconnectedCallback () {
+      this._switch.removeEventListener('change', this._switchMode)
+      this._small.removeEventListener('click', () => this._setBoardSize('small'))
+      this._medium.removeEventListener('click', () => this._setBoardSize('medium'))
+      this._large.removeEventListener('click', () => this._setBoardSize('large'))
+      this._grid.removeEventListener('fliptile', this._onTileFlip)
+    }
+
+    /**
+     * Called after the element is removed from the DOM.
+     *
+     * @param {object} event - Object containing event details.
+     */
+    _switchMode (event) {
+      if (event.target.checked) {
+        console.log(event)
+        this.setAttribute('dark', '')
+      } else {
+        this.removeAttribute('dark', '')
+      }
     }
 
     /**
@@ -197,6 +208,13 @@ customElements.define('memory-game',
       this._grid.setAttribute('id', boardSize)
       while (this._grid.firstElementChild) {
         this._grid.firstElementChild.remove()
+      }
+      if (this._grid.id === 'large') {
+        this._addTiles(16)
+      } else if (this._grid.id === 'medium') {
+        this._addTiles(8)
+      } else if (this._grid.id === 'small') {
+        this._addTiles(4)
       }
     }
 

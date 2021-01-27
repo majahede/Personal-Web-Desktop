@@ -126,9 +126,14 @@ customElements.define('currency-converter',
      */
     connectedCallback () {
       this._addCurrency()
-      this._convert.addEventListener('click', event => {
-        this._convertCurrency()
-      })
+      this._convert.addEventListener('click', () => this._convertCurrency())
+    }
+
+    /**
+     * Called after the element is removed from the DOM.
+     */
+    disconnectedCallback () {
+      this._convert.removeEventListener('click', () => this._convertCurrency())
     }
 
     /**
