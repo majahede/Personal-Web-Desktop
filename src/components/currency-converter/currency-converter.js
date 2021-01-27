@@ -1,5 +1,5 @@
 /**
- * The -------- web component module.
+ * The currency converter web component module.
  *
  * @author Maja Hedegärd <mh223pi@student.lnu.se>
  * @version 1.0.0
