@@ -14,7 +14,7 @@ template.innerHTML = `
 :host {
   background-color:  #ffc420;
   display: block;
-  width:510px;
+  width:520px;
 }
 
 .container {
@@ -143,7 +143,7 @@ customElements.define('currency-converter',
      * @returns {object} - the currency rates.
      */
     async _getCurrency () {
-      const URL = 'https://api.exchangeratesapi.io/latest'
+      const URL = 'http://api.exchangeratesapi.io/v1/latest?access_key=246e871e2e3345cf8b9ea44d4cb411ff'
       const getCurrency = await window.fetch(URL)
       const currency = await getCurrency.json()
       currency.rates.EUR = 1
