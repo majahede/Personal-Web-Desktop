@@ -1,8 +1,2 @@
 # &lt;personal-web-desktop&gt;
-A web component that is used to send and recieve messages from a server.
-
-
-## Example
-```html
-   <messages-app></messages-app>
-```
+This is the main application in which the smaller applications live. It has a "desktop-like" feeling with a dock in which the sub-applications icons is presented to the user. 
